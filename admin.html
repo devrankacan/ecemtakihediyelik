@@ -392,12 +392,12 @@
       <div class="brand-sub">Admin Paneli</div>
     </div>
     <nav class="sidebar-nav">
-      <div class="nav-item active" onclick="showTab('dashboard')"><i class="fas fa-home"></i> Genel Bakış</div>
-      <div class="nav-item" onclick="showTab('genel')"><i class="fas fa-sliders"></i> Site Ayarları</div>
-      <div class="nav-item" onclick="showTab('about')"><i class="fas fa-info-circle"></i> Hakkımızda</div>
-      <div class="nav-item" onclick="showTab('hero')"><i class="fas fa-image"></i> Ana Sayfa</div>
-      <div class="nav-item" onclick="showTab('products')"><i class="fas fa-box"></i> Ürünler</div>
-      <div class="nav-item" onclick="showTab('password')"><i class="fas fa-lock"></i> Şifre</div>
+      <div class="nav-item active" onclick="showTab('dashboard',this)"><i class="fas fa-home"></i> Genel Bakış</div>
+      <div class="nav-item" onclick="showTab('genel',this)"><i class="fas fa-sliders"></i> Site Ayarları</div>
+      <div class="nav-item" onclick="showTab('about',this)"><i class="fas fa-info-circle"></i> Hakkımızda</div>
+      <div class="nav-item" onclick="showTab('hero',this)"><i class="fas fa-image"></i> Ana Sayfa</div>
+      <div class="nav-item" onclick="showTab('products',this)"><i class="fas fa-box"></i> Ürünler</div>
+      <div class="nav-item" onclick="showTab('password',this)"><i class="fas fa-lock"></i> Şifre</div>
     </nav>
     <div class="sidebar-footer">
       <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</button>
@@ -730,11 +730,11 @@
     document.getElementById('loginPass').value = '';
   }
 
-  function showTab(name) {
+  function showTab(name, el) {
     document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     document.getElementById('tab-' + name).classList.add('active');
-    event.currentTarget.classList.add('active');
+    if (el) el.classList.add('active');
   }
 
   function showToast(msg, isError) {
