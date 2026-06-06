@@ -286,13 +286,30 @@
     .wa-float:hover { transform: scale(1.1); background: var(--wa-dark); }
 
     /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
+    @media (max-width: 768px) {
+      body { overflow-x: hidden; }
       nav, .btn-hesap { display: none; }
       .hamburger { display: block; }
-      .about-inner { grid-template-columns: 1fr; }
-      .about-image { order: -1; }
+      .about-inner { grid-template-columns: 1fr; gap: 32px; }
+      .about-image { order: -1; max-height: 250px; }
+      .about-image img { max-height: 250px; object-fit: cover; }
       .footer-inner { grid-template-columns: 1fr; gap: 32px; }
       .footer-bottom { flex-direction: column; text-align: center; }
+      .page-hero { justify-content: flex-start; text-align: left; }
+      .page-hero-content { text-align: left; }
+      .page-hero h1 { font-size: clamp(28px, 8vw, 40px); }
+      .announce-bar > span:first-child { display: none; }
+      .announce-bar { justify-content: center; gap: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      .about-section { padding: 48px 16px; }
+      .page-hero-content { padding: 36px 16px; }
+    }
+
+    @media (max-width: 375px) {
+      .page-hero h1 { font-size: clamp(24px, 8vw, 32px); }
+      .wa-float { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 22px; }
     }
   </style>
 </head>
