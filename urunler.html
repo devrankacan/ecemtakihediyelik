@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ürünler – Ecem Takı Hediyelik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --murd: #7B1B3A;
+      --murd-dark: #5c1229;
+      --murd-light: #f5eaee;
+      --cream: #F4EDE6;
+      --white: #ffffff;
+      --text: #2c2c2c;
+      --text-light: #666;
+      --wa: #25D366;
+      --wa-dark: #1ebe5d;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); }
+
+    /* ANNOUNCEMENT BAR */
+    .announce-bar { background: var(--murd-light); padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--murd); display: flex; align-items: center; justify-content: space-between; }
+    .announce-bar .social-top a { color: var(--murd); margin-left: 12px; font-size: 15px; transition: opacity .2s; }
+    .announce-bar .social-top a:hover { opacity: .7; }
+
+    /* HEADER */
+    header { background: var(--white); border-bottom: 1px solid #e8ddd5; position: sticky; top: 0; z-index: 1000; }
+    .header-inner { max-width: 1280px; margin: auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 46px; height: 46px; background: var(--murd); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+    .logo-text { line-height: 1.2; }
+    .logo-text strong { display: block; font-family: 'Playfair Display', serif; font-size: 18px; color: var(--murd); }
+    .logo-text span { font-size: 11px; color: var(--text-light); }
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--text); transition: color .2s; }
+    nav a:hover, nav a.active { color: var(--murd); }
+    .btn-hesap { background: var(--murd); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none; transition: background .2s; }
+    .btn-hesap:hover { background: var(--murd-dark); }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; font-size: 22px; color: var(--murd); }
+    .mobile-nav { display: none; flex-direction: column; background: white; border-top: 1px solid #eee; padding: 16px 24px; gap: 16px; }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { text-decoration: none; font-size: 15px; color: var(--text); font-weight: 500; }
+
+    /* PAGE HERO */
+    .page-hero { position: relative; min-height: 160px; display: flex; align-items: center; justify-content: flex-end; overflow: hidden; }
+    .page-hero-bg { position: absolute; inset: 0; background: url('https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=1400&q=80') center/cover; }
+    .page-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(80,10,25,.5) 0%, rgba(123,27,58,.85) 100%);
+    }
+    .page-hero-overlay::after {
+      content: '';
+      position: absolute; bottom: 0; right: 0;
+      width: 260px; height: 180px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 150'%3E%3Ccircle cx='160' cy='120' r='40' fill='none' stroke='rgba(255,255,255,0.12)' stroke-width='1.5'/%3E%3Ccircle cx='100' cy='100' r='30' fill='none' stroke='rgba(255,255,255,0.1)' stroke-width='1'/%3E%3Ccircle cx='60' cy='80' r='20' fill='none' stroke='rgba(255,255,255,0.08)' stroke-width='1'/%3E%3C/svg%3E");
+      background-size: cover;
+    }
+    .page-hero-content { position: relative; z-index: 1; max-width: 1100px; width: 100%; margin: auto; padding: 40px 24px; text-align: right; }
+    .page-hero-content h1 { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 52px); color: white; }
+
+    /* PRODUCTS */
+    .products-section { padding: 48px 24px; }
+    .products-inner { max-width: 1100px; margin: auto; display: flex; flex-direction: column; gap: 24px; }
+
+    .product-group {
+      border: 2px solid var(--murd);
+      border-radius: 4px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      overflow: hidden;
+    }
+
+    .product-card { display: flex; flex-direction: column; border-right: 1px solid var(--murd); }
+    .product-card:last-child { border-right: none; }
+
+    .product-card .prod-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      display: block;
+      background: var(--cream);
+    }
+    .product-card .prod-img-placeholder {
+      width: 100%;
+      aspect-ratio: 1;
+      background: var(--cream);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      color: var(--murd);
+      opacity: .3;
+    }
+
+    .product-card .prod-info {
+      background: var(--murd);
+      padding: 12px 10px;
+      text-align: center;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .product-card .prod-info h3 { color: white; font-size: 13px; font-weight: 600; line-height: 1.3; }
+    .product-card .prod-info .price { color: white; font-size: 13px; font-weight: 700; }
+    .btn-wa {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--wa);
+      color: white;
+      padding: 7px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 11px;
+      font-weight: 600;
+      white-space: nowrap;
+      transition: background .2s;
+      margin-top: 4px;
+    }
+    .btn-wa:hover { background: var(--wa-dark); }
+
+    /* FOOTER */
+    footer { background: var(--cream); border-top: 1px solid #ddd5cc; padding: 60px 24px 0; margin-top: 48px; }
+    .footer-inner { max-width: 1100px; margin: auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; padding-bottom: 40px; }
+    .footer-brand .logo { margin-bottom: 16px; display: inline-flex; }
+    .footer-brand p { font-size: 13px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; }
+    .footer-social { display: flex; gap: 12px; }
+    .footer-social a { width: 36px; height: 36px; background: var(--murd); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; text-decoration: none; transition: background .2s; }
+    .footer-social a:hover { background: var(--murd-dark); }
+    .footer-col h4 { font-size: 15px; font-weight: 600; color: var(--murd); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { text-decoration: none; font-size: 13px; color: var(--text-light); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--murd); }
+    .footer-contact-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: 13px; color: var(--text-light); }
+    .footer-contact-item i { color: var(--murd); margin-top: 2px; flex-shrink: 0; }
+    .footer-bottom { border-top: 1px solid #ddd5cc; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+    .footer-bottom-left { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-bottom-left a { text-decoration: none; font-size: 12px; color: var(--text-light); transition: color .2s; }
+    .footer-bottom-left a:hover { color: var(--murd); }
+    .footer-bottom-center { font-size: 12px; color: var(--text-light); }
+    .footer-bottom-right { font-size: 12px; color: var(--text-light); }
+    .footer-bottom-right a { color: var(--murd); text-decoration: none; font-weight: 600; }
+
+    /* WHATSAPP FLOAT */
+    .wa-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 56px; height: 56px; background: var(--wa); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 16px rgba(37,211,102,.4); transition: transform .2s, background .2s; }
+    .wa-float:hover { transform: scale(1.1); background: var(--wa-dark); }
+
+    @media (max-width: 900px) {
+      nav, .btn-hesap { display: none; }
+      .hamburger { display: block; }
+      .product-group { grid-template-columns: repeat(2, 1fr); }
+      .product-card { border-bottom: 1px solid var(--murd); border-right: none; }
+      .product-card:nth-child(odd) { border-right: 1px solid var(--murd); }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .product-group { grid-template-columns: 1fr; }
+      .product-card:nth-child(odd) { border-right: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce-bar">
+  <span></span>
+  <span>Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
+  <div class="social-top">
+    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-icon"><i class="fas fa-gem"></i></div>
+      <div class="logo-text">
+        <strong>Ecem Takı</strong>
+        <span>Bayburt'ta İlk ve Tek</span>
+      </div>
+    </a>
+    <nav>
+      <a href="index.html">Anasayfa</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="urunler.html" class="active">Ürünler</a>
+      <a href="iletisim.html">İletişim</a>
+    </nav>
+    <a href="https://api.whatsapp.com/send/?phone=904582113434&text&type=phone_number&app_absent=0" class="btn-hesap" target="_blank">
+      <i class="fab fa-whatsapp"></i> Sipariş Ver
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menü"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Anasayfa</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <a href="urunler.html">Ürünler</a>
+    <a href="iletisim.html">İletişim</a>
+    <a href="https://api.whatsapp.com/send/?phone=904582113434&text&type=phone_number&app_absent=0" target="_blank">
+      <i class="fab fa-whatsapp"></i> Sipariş Ver
+    </a>
+  </div>
+</header>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-bg"></div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <h1>Ürünler</h1>
+  </div>
+</div>
+
+<!-- PRODUCTS -->
+<section class="products-section">
+  <div class="products-inner">
+
+    <!-- GRUP 1 -->
+    <div class="product-group">
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=400&q=80" alt="Zippo Çakmak" />
+        <div class="prod-info">
+          <h3>Zippo Çakmak</h3>
+          <div class="price">150,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Zippo%20Çakmak%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=400&q=80" alt="Bakır Bilezik" />
+        <div class="prod-info">
+          <h3>Bakır Bilezik</h3>
+          <div class="price">250,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Bakır%20Bilezik%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=400&q=80" alt="Beyaz Bere" />
+        <div class="prod-info">
+          <h3>Beyaz Bere</h3>
+          <div class="price">175,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Beyaz%20Bere%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400&q=80" alt="Deri Eldiven" />
+        <div class="prod-info">
+          <h3>Deri Eldiven</h3>
+          <div class="price">400,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Deri%20Eldiven%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&q=80" alt="Rüzgar Çakmak" />
+        <div class="prod-info">
+          <h3>Rüzgar Çakmak</h3>
+          <div class="price">350,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Rüzgar%20Çakmak%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GRUP 2 -->
+    <div class="product-group">
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=400&q=80" alt="Adalet Heykeli" />
+        <div class="prod-info">
+          <h3>Adalet Heykeli</h3>
+          <div class="price">2.500,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Adalet%20Heykeli%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80" alt="Zarif Çelik Kolye" />
+        <div class="prod-info">
+          <h3>Zarif Çelik Kolye</h3>
+          <div class="price">300,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Zarif%20Çelik%20Kolye%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=400&q=80" alt="Ehram Takım" />
+        <div class="prod-info">
+          <h3>Ehram Takım</h3>
+          <div class="price">5.000,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Ehram%20Takım%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1591085686350-798c0f9faa6f?w=400&q=80" alt="Ehram Çocuk Yelek" />
+        <div class="prod-info">
+          <h3>Ehram Çocuk Yelek</h3>
+          <div class="price">5.000,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Ehram%20Çocuk%20Yelek%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1584184924103-e310d9dc82fc?w=400&q=80" alt="Ehram Yelek" />
+        <div class="prod-info">
+          <h3>Ehram Yelek</h3>
+          <div class="price">5.000,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Ehram%20Yelek%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GRUP 3 -->
+    <div class="product-group">
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1598554747436-c9293d6a588f?w=400&q=80" alt="Ehram Yelek" />
+        <div class="prod-info">
+          <h3>Ehram Yelek</h3>
+          <div class="price">4.000,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Ehram%20Yelek%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&q=80" alt="İnci Kolye" />
+        <div class="prod-info">
+          <h3>İnci Kolye</h3>
+          <div class="price">3.000,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=İnci%20Kolye%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1510771463146-e89e6e86560e?w=400&q=80" alt="Leopar Bere" />
+        <div class="prod-info">
+          <h3>Leopar Bere</h3>
+          <div class="price">400,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Leopar%20Bere%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1573408301185-9519f94f3e23?w=400&q=80" alt="Yonca Bileklik" />
+        <div class="prod-info">
+          <h3>Yonca Bileklik</h3>
+          <div class="price">200,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Yonca%20Bileklik%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1635767798638-3e25273a8236?w=400&q=80" alt="Çelik Balık Sırtı Kolye" />
+        <div class="prod-info">
+          <h3>Çelik Balık Sırtı Kolye</h3>
+          <div class="price">350,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Çelik%20Balık%20Sırtı%20Kolye%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- GRUP 4 -->
+    <div class="product-group">
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1509225770129-fbcf8a696c0b?w=400&q=80" alt="Taş Saat Kule" />
+        <div class="prod-info">
+          <h3>Taş Saat Kule</h3>
+          <div class="price">1.100,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Taş%20Saat%20Kule%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <img class="prod-img" src="https://images.unsplash.com/photo-1518893494013-481c1d8ed3fd?w=400&q=80" alt="Siyah Zippo Çakmak" />
+        <div class="prod-info">
+          <h3>Siyah Zippo Çakmak</h3>
+          <div class="price">200,00₺</div>
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Siyah%20Zippo%20Çakmak%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+          </a>
+        </div>
+      </div>
+
+      <!-- boş hücreler görünümü korumak için -->
+      <div class="product-card" style="background:var(--murd); border:none;"></div>
+      <div class="product-card" style="background:var(--murd); border:none;"></div>
+      <div class="product-card" style="background:var(--murd); border:none;"></div>
+
+    </div>
+
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fas fa-gem"></i></div>
+        <div class="logo-text">
+          <strong>Ecem Takı</strong>
+          <span>Bayburt'ta İlk ve Tek</span>
+        </div>
+      </a>
+      <p>Bayburt'un en güzel hediyelik ve takı koleksiyonunu sizinle buluşturuyoruz.</p>
+      <div class="footer-social">
+        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="https://api.whatsapp.com/send/?phone=904582113434&text&type=phone_number&app_absent=0" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Sayfalar</h4>
+      <ul>
+        <li><a href="index.html">Anasayfa</a></li>
+        <li><a href="hakkimizda.html">Hakkımızda</a></li>
+        <li><a href="urunler.html">Ürünler</a></li>
+        <li><a href="iletisim.html">İletişim</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>İletişim</h4>
+      <div class="footer-contact-item">
+        <i class="fas fa-location-dot"></i>
+        <span>Tuzcuzade Mah. Cumhuriyet Cad. Bayburt Dedekorkut Şehir Müzesi Dükkan 1</span>
+      </div>
+      <div class="footer-contact-item">
+        <i class="fas fa-envelope"></i>
+        <span>destek@ecemtakihediyelik.com</span>
+      </div>
+      <div class="footer-contact-item">
+        <i class="fab fa-whatsapp"></i>
+        <span>0458 2113434</span>
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="footer-bottom-left">
+      <a href="#">Mesafeli Satış Sözleşmesi</a>
+      <a href="#">İptal ve İade Koşulları</a>
+    </div>
+    <div class="footer-bottom-center">Copyright &copy; 2025, Tüm Hakları Saklıdır.</div>
+    <div class="footer-bottom-right">Created By <a href="#">Devran Kaçan</a></div>
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://api.whatsapp.com/send/?phone=904582113434&text=Merhaba%2C%20sipariş%20vermek%20istiyorum&type=phone_number&app_absent=0"
+   class="wa-float" target="_blank" aria-label="WhatsApp ile sipariş ver">
+  <i class="fab fa-whatsapp"></i>
+</a>
+
+<script>
+  function toggleMenu() {
+    document.getElementById('mobileNav').classList.toggle('open');
+  }
+</script>
+</body>
+</html>
