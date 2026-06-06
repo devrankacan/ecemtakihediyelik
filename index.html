@@ -609,7 +609,7 @@
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar">
   <span></span>
-  <span class="announce-text">Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
+  <span class="announce-text" id="announceText">Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
   <div class="social-top">
     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
     <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -653,13 +653,13 @@
 <section class="hero">
   <div class="hero-inner">
     <div class="hero-content">
-      <p class="hero-tag">Ecem Takı'ya Hoşgeldiniz</p>
-      <h1 class="hero-title">Tarzınızı Tamamlayan Işıltı</h1>
-      <p class="hero-subtitle">Şıklığınızı tamamlayan o özel parçayı şimdi keşfedin. Bayburt'un en güzel hediyelik ve takı koleksiyonu.</p>
+      <p class="hero-tag" id="heroTag">Ecem Takı'ya Hoşgeldiniz</p>
+      <h1 class="hero-title" id="heroTitle">Tarzınızı Tamamlayan Işıltı</h1>
+      <p class="hero-subtitle" id="heroSubtitle">Şıklığınızı tamamlayan o özel parçayı şimdi keşfedin. Bayburt'un en güzel hediyelik ve takı koleksiyonu.</p>
       <a href="urunler.html" class="btn-primary">Ürünler</a>
     </div>
     <div class="hero-image">
-      <img src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&q=80" alt="Takı koleksiyonu" />
+      <img id="heroImg" src="https://images.unsplash.com/photo-1603561591411-07134e71a2a9?w=800&q=80" alt="Takı koleksiyonu" />
     </div>
   </div>
 </section>
@@ -943,15 +943,15 @@
       <h4>İletişim</h4>
       <div class="footer-contact-item">
         <i class="fas fa-location-dot"></i>
-        <span>Tuzcuzade Mah. Cumhuriyet Cad. Bayburt Dedekorkut Şehir Müzesi Dükkan 1</span>
+        <span data-f="address">Tuzcuzade Mah. Cumhuriyet Cad. Bayburt Dedekorkut Şehir Müzesi Dükkan 1</span>
       </div>
       <div class="footer-contact-item">
         <i class="fas fa-envelope"></i>
-        <span>destek@ecemtakihediyelik.com</span>
+        <span data-f="email">destek@ecemtakihediyelik.com</span>
       </div>
       <div class="footer-contact-item">
         <i class="fab fa-whatsapp"></i>
-        <span>+90 458 211 34 34</span>
+        <span data-f="phone">+90 458 211 34 34</span>
       </div>
     </div>
   </div>
@@ -1005,6 +1005,80 @@
   });
 
   buildDots();
+</script>
+<script src="site-data.js"></script>
+<script>
+  (function() {
+    const d = getSiteData();
+    applyCommon(d);
+
+    // Announce
+    const ann = document.getElementById('announceText');
+    if (ann) ann.textContent = d.announce;
+
+    // Hero
+    const heroTag = document.getElementById('heroTag');
+    if (heroTag) heroTag.textContent = d.hero_tag;
+    const heroTitle = document.getElementById('heroTitle');
+    if (heroTitle) heroTitle.textContent = d.hero_title;
+    const heroSub = document.getElementById('heroSubtitle');
+    if (heroSub) heroSub.textContent = d.hero_subtitle;
+    const heroImg = document.getElementById('heroImg');
+    if (heroImg && d.hero_img) heroImg.src = d.hero_img;
+
+    // WhatsApp slider cards
+    document.querySelectorAll('[data-wa="product"]').forEach(el => {
+      const name = el.closest('.product-card')?.querySelector('h3')?.textContent || '';
+      el.href = waLink(d, name);
+    });
+    document.querySelectorAll('[data-wa="fg"]').forEach(el => {
+      const name = el.closest('.fg-item')?.querySelector('h3')?.textContent || '';
+      el.href = waLink(d, name);
+    });
+
+    // Slider products from data
+    const track = document.getElementById('sliderTrack');
+    if (track && d.products.length) {
+      const shown = d.products.slice(0, 9);
+      track.innerHTML = shown.map(p => `
+        <div class="product-card">
+          <div class="product-img"><img src="${p.img}" alt="${p.name}" /></div>
+          <div class="product-info">
+            <h3>${p.name}</h3>
+            <div class="price">${p.price}</div>
+            <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
+              <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+            </a>
+          </div>
+        </div>
+      `).join('');
+      // Rebuild slider
+      const cards2 = track.querySelectorAll('.product-card');
+      let cur2 = 0;
+      let pv2 = window.innerWidth <= 900 ? 1 : 3;
+      const tot2 = Math.ceil(cards2.length / pv2);
+      const dots2 = document.getElementById('sliderDots');
+      function buildDots2() {
+        if (!dots2) return;
+        dots2.innerHTML = '';
+        for (let i = 0; i < tot2; i++) {
+          const dot = document.createElement('span');
+          if (i === cur2) dot.classList.add('active');
+          dot.onclick = () => goTo2(i);
+          dots2.appendChild(dot);
+        }
+      }
+      function goTo2(idx) {
+        cur2 = Math.max(0, Math.min(idx, tot2 - 1));
+        const w = cards2[0] ? cards2[0].offsetWidth + 24 : 0;
+        track.style.transform = `translateX(-${cur2 * pv2 * w}px)`;
+        track.style.transition = 'transform .4s ease';
+        buildDots2();
+      }
+      window._slide = dir => goTo2(cur2 + dir);
+      buildDots2();
+    }
+  })();
 </script>
 </body>
 </html>

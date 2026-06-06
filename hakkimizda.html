@@ -301,7 +301,7 @@
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar">
   <span></span>
-  <span class="announce-text">Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
+  <span class="announce-text" id="announceText">Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
   <div class="social-top">
     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
     <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -354,11 +354,11 @@
   <div class="about-inner">
     <div class="about-content">
       <h2>Biz Kimiz?</h2>
-      <p>"Estetik, kalite ve güveni bir araya getiren Ecem Takı, takı ve aksesuar sektöründe Bayburt merkezli olarak hizmet vermektedir. Amacımız sadece takı satmak değil, müşterilerimizin kendilerini özel hissetmelerini sağlayacak tasarımları ulaşılabilir fiyatlarla sunmaktır.</p>
-      <p>Geleneksel motiflerden modern çizgilere uzanan özenle seçilmiş koleksiyonumuzla, şıklığınızın en tamamlayıcı parçası olmayı hedefliyoruz. Mağazamızda ve online platformlarımızda sunduğumuz hizmetle, kaliteyi ve zarafeti yaşam tarzı haline getirenlerin adresiyiz."</p>
+      <p id="aboutText1">"Estetik, kalite ve güveni bir araya getiren Ecem Takı, takı ve aksesuar sektöründe Bayburt merkezli olarak hizmet vermektedir. Amacımız sadece takı satmak değil, müşterilerimizin kendilerini özel hissetmelerini sağlayacak tasarımları ulaşılabilir fiyatlarla sunmaktır.</p>
+      <p id="aboutText2">Geleneksel motiflerden modern çizgilere uzanan özenle seçilmiş koleksiyonumuzla, şıklığınızın en tamamlayıcı parçası olmayı hedefliyoruz. Mağazamızda ve online platformlarımızda sunduğumuz hizmetle, kaliteyi ve zarafeti yaşam tarzı haline getirenlerin adresiyiz."</p>
     </div>
     <div class="about-image">
-      <img src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80" alt="Ecem Takı atölyesi" />
+      <img id="aboutImg" src="https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=800&q=80" alt="Ecem Takı atölyesi" />
     </div>
   </div>
 </section>
@@ -427,6 +427,19 @@
   function toggleMenu() {
     document.getElementById('mobileNav').classList.toggle('open');
   }
+</script>
+<script src="site-data.js"></script>
+<script>
+  (function() {
+    const d = getSiteData();
+    applyCommon(d);
+    const t1 = document.getElementById('aboutText1');
+    if (t1) t1.textContent = d.about_text1;
+    const t2 = document.getElementById('aboutText2');
+    if (t2) t2.textContent = d.about_text2;
+    const img = document.getElementById('aboutImg');
+    if (img && d.about_img) img.src = d.about_img;
+  })();
 </script>
 </body>
 </html>

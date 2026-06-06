@@ -173,7 +173,7 @@
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar">
   <span></span>
-  <span>Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
+  <span id="announceText">Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
   <div class="social-top">
     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
     <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -224,8 +224,8 @@
 
 <!-- PRODUCTS -->
 <section class="products-section">
-  <div class="products-inner">
-
+  <div class="products-inner" id="productsInner">
+    <!-- JS tarafından doldurulur -->
     <!-- GRUP 1 -->
     <div class="product-group">
 
@@ -505,6 +505,43 @@
   function toggleMenu() {
     document.getElementById('mobileNav').classList.toggle('open');
   }
+</script>
+<script src="site-data.js"></script>
+<script>
+  (function() {
+    const d = getSiteData();
+    applyCommon(d);
+
+    const container = document.getElementById('productsInner');
+    if (!container || !d.products.length) return;
+
+    // Group products into rows of 5
+    const groupSize = 5;
+    let html = '';
+    for (let i = 0; i < d.products.length; i += groupSize) {
+      const group = d.products.slice(i, i + groupSize);
+      const empties = groupSize - group.length;
+      html += '<div class="product-group">';
+      group.forEach(p => {
+        html += `
+          <div class="product-card">
+            <img class="prod-img" src="${p.img}" alt="${p.name}" onerror="this.style.background='#F4EDE6';this.removeAttribute('src')" />
+            <div class="prod-info">
+              <h3>${p.name}</h3>
+              <div class="price">${p.price}</div>
+              <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
+                <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+              </a>
+            </div>
+          </div>`;
+      });
+      for (let e = 0; e < empties; e++) {
+        html += '<div class="product-card" style="background:var(--murd);border:none;"></div>';
+      }
+      html += '</div>';
+    }
+    container.innerHTML = html;
+  })();
 </script>
 </body>
 </html>

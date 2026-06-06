@@ -196,7 +196,7 @@
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce-bar">
   <span></span>
-  <span>Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
+  <span id="announceText">Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
   <div class="social-top">
     <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
     <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -264,15 +264,15 @@
 
       <div class="contact-item">
         <i class="fas fa-location-dot"></i>
-        <span>Tuzcuzade Mah. Cumhuriyet Cad. Bayburt Dedekorkut Şehir Müzesi Dükkan 1</span>
+        <span data-f="address">Tuzcuzade Mah. Cumhuriyet Cad. Bayburt Dedekorkut Şehir Müzesi Dükkan 1</span>
       </div>
       <div class="contact-item">
         <i class="fas fa-envelope"></i>
-        <a href="mailto:destek@ecemtakihediyelik.com">destek@ecemtakihediyelik.com</a>
+        <span data-f="email">destek@ecemtakihediyelik.com</span>
       </div>
       <div class="contact-item">
         <i class="fas fa-phone"></i>
-        <a href="tel:+904582113434">0458 2113434</a>
+        <span data-f="phone">0458 2113434</span>
       </div>
 
       <h3 class="follow-title">Bizi Takip Edin</h3>
@@ -350,6 +350,13 @@
   function toggleMenu() {
     document.getElementById('mobileNav').classList.toggle('open');
   }
+</script>
+<script src="site-data.js"></script>
+<script>
+  (function() {
+    const d = getSiteData();
+    applyCommon(d);
+  })();
 </script>
 </body>
 </html>

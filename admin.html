@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel – Ecem Takı</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --murd: #7B1B3A;
+      --murd-dark: #5c1229;
+      --murd-light: #f5eaee;
+      --cream: #F4EDE6;
+      --white: #fff;
+      --sidebar: #1e1e2e;
+      --sidebar2: #2a2a3e;
+      --text: #2c2c2c;
+      --text-light: #888;
+      --border: #e0d5cc;
+      --success: #28a745;
+      --danger: #dc3545;
+      --wa: #25D366;
+    }
+    html, body { height: 100%; }
+    body { font-family: 'Inter', sans-serif; background: #f0ebe6; color: var(--text); }
+
+    /* LOGIN */
+    #loginScreen {
+      position: fixed; inset: 0;
+      background: linear-gradient(135deg, var(--murd-dark), var(--murd));
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
+    }
+    .login-box {
+      background: white;
+      border-radius: 16px;
+      padding: 48px 40px;
+      width: 100%;
+      max-width: 380px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.25);
+      text-align: center;
+    }
+    .login-box .login-logo {
+      width: 64px; height: 64px;
+      background: var(--murd);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-size: 28px; color: white;
+    }
+    .login-box h1 { font-size: 22px; margin-bottom: 6px; color: var(--murd); }
+    .login-box p { font-size: 13px; color: var(--text-light); margin-bottom: 28px; }
+    .login-box input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 15px;
+      margin-bottom: 14px;
+      outline: none;
+      transition: border .2s;
+    }
+    .login-box input:focus { border-color: var(--murd); }
+    .login-box button {
+      width: 100%;
+      background: var(--murd);
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .login-box button:hover { background: var(--murd-dark); }
+    .login-error { color: var(--danger); font-size: 13px; margin-top: 10px; display: none; }
+
+    /* LAYOUT */
+    #adminApp { display: none; min-height: 100vh; }
+
+    .sidebar {
+      position: fixed;
+      left: 0; top: 0; bottom: 0;
+      width: 240px;
+      background: var(--sidebar);
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+    }
+    .sidebar-brand {
+      padding: 24px 20px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .sidebar-brand .brand-title { color: white; font-size: 16px; font-weight: 700; }
+    .sidebar-brand .brand-sub { color: rgba(255,255,255,.45); font-size: 11px; margin-top: 2px; }
+
+    .sidebar-nav { flex: 1; padding: 12px 0; overflow-y: auto; }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: rgba(255,255,255,.6);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: background .2s, color .2s;
+      border-left: 3px solid transparent;
+    }
+    .nav-item:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.9); }
+    .nav-item.active { background: rgba(123,27,58,.35); color: white; border-left-color: var(--murd); }
+    .nav-item i { width: 18px; text-align: center; font-size: 14px; }
+
+    .sidebar-footer {
+      padding: 16px 20px;
+      border-top: 1px solid rgba(255,255,255,.08);
+    }
+    .logout-btn {
+      display: flex; align-items: center; gap: 10px;
+      color: rgba(255,255,255,.5);
+      font-size: 13px;
+      cursor: pointer;
+      transition: color .2s;
+      background: none; border: none; width: 100%;
+    }
+    .logout-btn:hover { color: white; }
+
+    .main-content {
+      margin-left: 240px;
+      padding: 32px;
+      min-height: 100vh;
+    }
+
+    .page-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 28px;
+    }
+    .page-header h2 { font-size: 22px; font-weight: 700; color: var(--text); }
+    .page-header p { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+
+    /* TABS */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* CARD */
+    .card {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    }
+    .card h3 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--murd);
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* FORM */
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+    .form-group.full { grid-column: 1 / -1; }
+    .form-group label { font-size: 12px; font-weight: 600; color: var(--text-light); text-transform: uppercase; letter-spacing: .5px; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border .2s;
+      background: white;
+      color: var(--text);
+    }
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--murd); }
+    .form-group textarea { resize: vertical; min-height: 100px; }
+
+    .img-preview {
+      width: 80px; height: 80px;
+      border-radius: 8px;
+      object-fit: cover;
+      border: 2px solid var(--border);
+      margin-top: 6px;
+      display: none;
+    }
+    .img-preview.show { display: block; }
+
+    /* BUTTONS */
+    .btn { padding: 10px 20px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; transition: all .2s; display: inline-flex; align-items: center; gap: 8px; }
+    .btn-primary { background: var(--murd); color: white; }
+    .btn-primary:hover { background: var(--murd-dark); }
+    .btn-success { background: var(--success); color: white; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: var(--danger); color: white; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-secondary { background: #6c757d; color: white; }
+    .btn-secondary:hover { background: #545b62; }
+    .btn-outline { background: transparent; color: var(--murd); border: 1.5px solid var(--murd); }
+    .btn-outline:hover { background: var(--murd); color: white; }
+    .btn-sm { padding: 6px 14px; font-size: 12px; }
+
+    .save-bar {
+      display: flex; align-items: center; justify-content: flex-end;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .save-feedback { font-size: 13px; color: var(--success); display: none; }
+    .save-feedback.show { display: inline-flex; align-items: center; gap: 6px; }
+
+    /* PRODUCTS TABLE */
+    .products-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .search-input {
+      padding: 8px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      outline: none;
+      width: 220px;
+      transition: border .2s;
+    }
+    .search-input:focus { border-color: var(--murd); }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+    }
+    .prod-admin-card {
+      background: white;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+      transition: box-shadow .2s;
+    }
+    .prod-admin-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+    .prod-admin-card img {
+      width: 100%; aspect-ratio: 1;
+      object-fit: cover;
+      background: var(--cream);
+    }
+    .prod-admin-info {
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .prod-admin-info h4 { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .prod-admin-info .prod-price { font-size: 13px; color: var(--murd); font-weight: 700; margin-bottom: 10px; }
+    .prod-admin-actions { display: flex; gap: 6px; }
+
+    /* PRODUCT MODAL */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.5);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: white;
+      border-radius: 16px;
+      padding: 28px;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .modal-header h3 { font-size: 17px; font-weight: 700; color: var(--murd); }
+    .modal-close { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--text-light); transition: color .2s; }
+    .modal-close:hover { color: var(--text); }
+
+    /* LOGO UPLOAD */
+    .logo-upload-area {
+      border: 2px dashed var(--border);
+      border-radius: 10px;
+      padding: 24px;
+      text-align: center;
+      cursor: pointer;
+      transition: border .2s, background .2s;
+      margin-top: 8px;
+    }
+    .logo-upload-area:hover { border-color: var(--murd); background: var(--murd-light); }
+    .logo-upload-area i { font-size: 28px; color: var(--text-light); margin-bottom: 8px; display: block; }
+    .logo-upload-area p { font-size: 13px; color: var(--text-light); }
+    .logo-preview {
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--murd);
+      margin: 12px auto 0;
+      display: none;
+    }
+    .logo-preview.show { display: block; }
+
+    /* TOAST */
+    .toast {
+      position: fixed;
+      bottom: 28px; right: 28px;
+      background: var(--success);
+      color: white;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      display: flex; align-items: center; gap: 10px;
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+      z-index: 9999;
+      transform: translateY(80px);
+      opacity: 0;
+      transition: all .3s;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.error { background: var(--danger); }
+
+    /* PASSWORD TAB */
+    .pass-form { max-width: 400px; }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 28px;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 10px;
+      padding: 16px 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
+      display: flex; align-items: center; gap: 14px;
+    }
+    .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .stat-icon.murd { background: var(--murd-light); color: var(--murd); }
+    .stat-icon.green { background: #e6f7ea; color: var(--success); }
+    .stat-icon.blue { background: #e6f0ff; color: #3b82f6; }
+    .stat-icon.orange { background: #fff3e6; color: #f97316; }
+    .stat-info .stat-value { font-size: 22px; font-weight: 700; }
+    .stat-info .stat-label { font-size: 12px; color: var(--text-light); }
+
+    @media (max-width: 900px) {
+      .sidebar { width: 200px; }
+      .main-content { margin-left: 200px; padding: 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+      .sidebar { display: none; }
+      .main-content { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo"><i class="fas fa-gem"></i></div>
+    <h1>Admin Paneli</h1>
+    <p>Ecem Takı Hediyelik</p>
+    <input type="text" id="loginUser" placeholder="Kullanıcı adı" autocomplete="username" />
+    <input type="password" id="loginPass" placeholder="Şifre" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()" />
+    <button onclick="doLogin()"><i class="fas fa-sign-in-alt"></i> Giriş Yap</button>
+    <p class="login-error" id="loginError">Kullanıcı adı veya şifre hatalı!</p>
+  </div>
+</div>
+
+<!-- ADMIN APP -->
+<div id="adminApp">
+
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sidebar-brand">
+      <div class="brand-title">Ecem Takı</div>
+      <div class="brand-sub">Admin Paneli</div>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-item active" onclick="showTab('dashboard')"><i class="fas fa-home"></i> Genel Bakış</div>
+      <div class="nav-item" onclick="showTab('genel')"><i class="fas fa-sliders"></i> Site Ayarları</div>
+      <div class="nav-item" onclick="showTab('about')"><i class="fas fa-info-circle"></i> Hakkımızda</div>
+      <div class="nav-item" onclick="showTab('hero')"><i class="fas fa-image"></i> Ana Sayfa</div>
+      <div class="nav-item" onclick="showTab('products')"><i class="fas fa-box"></i> Ürünler</div>
+      <div class="nav-item" onclick="showTab('password')"><i class="fas fa-lock"></i> Şifre</div>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" onclick="doLogout()"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</button>
+    </div>
+  </div>
+
+  <!-- MAIN -->
+  <div class="main-content">
+
+    <!-- DASHBOARD -->
+    <div class="tab-panel active" id="tab-dashboard">
+      <div class="page-header">
+        <div>
+          <h2>Genel Bakış</h2>
+          <p>Sitenizin özet bilgileri</p>
+        </div>
+        <a href="index.html" target="_blank" class="btn btn-outline"><i class="fas fa-external-link-alt"></i> Siteyi Görüntüle</a>
+      </div>
+      <div class="stats-bar">
+        <div class="stat-card">
+          <div class="stat-icon murd"><i class="fas fa-box"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="statProducts">0</div>
+            <div class="stat-label">Toplam Ürün</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon green"><i class="fab fa-whatsapp"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" id="statWa">—</div>
+            <div class="stat-label">WhatsApp</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon blue"><i class="fas fa-envelope"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" style="font-size:13px;padding-top:4px;" id="statEmail">—</div>
+            <div class="stat-label">E-posta</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon orange"><i class="fas fa-location-dot"></i></div>
+          <div class="stat-info">
+            <div class="stat-value" style="font-size:12px;padding-top:4px;" id="statCity">Bayburt</div>
+            <div class="stat-label">Şehir</div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3><i class="fas fa-link"></i> Hızlı Erişim</h3>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+          <a href="index.html" target="_blank" class="btn btn-primary btn-sm"><i class="fas fa-home"></i> Anasayfa</a>
+          <a href="hakkimizda.html" target="_blank" class="btn btn-outline btn-sm"><i class="fas fa-info"></i> Hakkımızda</a>
+          <a href="urunler.html" target="_blank" class="btn btn-outline btn-sm"><i class="fas fa-box"></i> Ürünler</a>
+          <a href="iletisim.html" target="_blank" class="btn btn-outline btn-sm"><i class="fas fa-phone"></i> İletişim</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- GENEL AYARLAR -->
+    <div class="tab-panel" id="tab-genel">
+      <div class="page-header">
+        <div><h2>Site Ayarları</h2><p>Logo, iletişim ve sosyal medya</p></div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-image"></i> Logo</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Logo Yazısı</label>
+            <input type="text" id="logo_text" placeholder="Ecem Takı" />
+          </div>
+          <div class="form-group">
+            <label>Alt Yazı</label>
+            <input type="text" id="logo_sub" placeholder="Bayburt'ta İlk ve Tek" />
+          </div>
+          <div class="form-group full">
+            <label>Logo Görseli (URL veya dosya yükle)</label>
+            <input type="url" id="logo_img_url" placeholder="https://... (boş bırakırsan ikon kullanılır)" oninput="previewImg('logo_img_url','logoImgPreview')" />
+            <img id="logoImgPreview" class="img-preview" />
+            <div style="margin-top:10px;">
+              <label style="text-transform:none;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;">
+                <input type="file" accept="image/*" style="display:none" onchange="uploadLogoFile(this)" />
+                <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Dosyadan Yükle</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-bullhorn"></i> Duyuru Çubuğu</h3>
+        <div class="form-group">
+          <label>Duyuru Metni</label>
+          <input type="text" id="announce" placeholder="Sadece bu ay ilk alışverişinizde %35'e varan indirim." />
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-address-book"></i> İletişim Bilgileri</h3>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>Adres</label>
+            <input type="text" id="address" placeholder="Adres..." />
+          </div>
+          <div class="form-group">
+            <label>Telefon</label>
+            <input type="text" id="phone" placeholder="0458 2113434" />
+          </div>
+          <div class="form-group">
+            <label>E-posta</label>
+            <input type="email" id="email" placeholder="destek@ecemtakihediyelik.com" />
+          </div>
+          <div class="form-group">
+            <label>WhatsApp Numarası (başında 90 ile)</label>
+            <input type="text" id="whatsapp" placeholder="904582113434" />
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3><i class="fas fa-share-nodes"></i> Sosyal Medya Linkleri</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label><i class="fab fa-facebook-f"></i> Facebook URL</label>
+            <input type="url" id="social_fb" placeholder="https://facebook.com/..." />
+          </div>
+          <div class="form-group">
+            <label><i class="fab fa-instagram"></i> Instagram URL</label>
+            <input type="url" id="social_ig" placeholder="https://instagram.com/..." />
+          </div>
+          <div class="form-group">
+            <label><i class="fab fa-tiktok"></i> TikTok URL</label>
+            <input type="url" id="social_tt" placeholder="https://tiktok.com/..." />
+          </div>
+        </div>
+      </div>
+
+      <div class="save-bar">
+        <span class="save-feedback" id="genelFeedback"><i class="fas fa-check-circle"></i> Kaydedildi!</span>
+        <button class="btn btn-primary" onclick="saveGenel()"><i class="fas fa-save"></i> Kaydet</button>
+      </div>
+    </div>
+
+    <!-- HAKKIMIZDA -->
+    <div class="tab-panel" id="tab-about">
+      <div class="page-header">
+        <div><h2>Hakkımızda</h2><p>Sayfa içeriğini düzenle</p></div>
+      </div>
+      <div class="card">
+        <h3><i class="fas fa-pen"></i> Biz Kimiz? Metni</h3>
+        <div class="form-grid">
+          <div class="form-group full">
+            <label>1. Paragraf</label>
+            <textarea id="about_text1" rows="4"></textarea>
+          </div>
+          <div class="form-group full">
+            <label>2. Paragraf</label>
+            <textarea id="about_text2" rows="4"></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Hakkımızda Görseli (URL)</label>
+            <input type="url" id="about_img" placeholder="https://..." oninput="previewImg('about_img','aboutImgPreview')" />
+            <img id="aboutImgPreview" class="img-preview" style="width:140px;height:100px;border-radius:8px;" />
+            <div style="margin-top:10px;">
+              <label style="text-transform:none;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;">
+                <input type="file" accept="image/*" style="display:none" onchange="uploadFileToField(this,'about_img','aboutImgPreview')" />
+                <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Dosyadan Yükle</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <span class="save-feedback" id="aboutFeedback"><i class="fas fa-check-circle"></i> Kaydedildi!</span>
+        <button class="btn btn-primary" onclick="saveAbout()"><i class="fas fa-save"></i> Kaydet</button>
+      </div>
+    </div>
+
+    <!-- HERO / ANA SAYFA -->
+    <div class="tab-panel" id="tab-hero">
+      <div class="page-header">
+        <div><h2>Ana Sayfa</h2><p>Hero bölümü içeriği</p></div>
+      </div>
+      <div class="card">
+        <h3><i class="fas fa-star"></i> Hero Bölümü</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Üst Etiket</label>
+            <input type="text" id="hero_tag" placeholder="Ecem Takı'ya Hoşgeldiniz" />
+          </div>
+          <div class="form-group">
+            <label>Başlık</label>
+            <input type="text" id="hero_title" placeholder="Tarzınızı Tamamlayan Işıltı" />
+          </div>
+          <div class="form-group full">
+            <label>Alt Yazı</label>
+            <textarea id="hero_subtitle" rows="2"></textarea>
+          </div>
+          <div class="form-group full">
+            <label>Hero Görseli (URL)</label>
+            <input type="url" id="hero_img" placeholder="https://..." oninput="previewImg('hero_img','heroImgPreview')" />
+            <img id="heroImgPreview" class="img-preview" style="width:200px;height:130px;border-radius:8px;" />
+            <div style="margin-top:10px;">
+              <label style="text-transform:none;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;">
+                <input type="file" accept="image/*" style="display:none" onchange="uploadFileToField(this,'hero_img','heroImgPreview')" />
+                <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Dosyadan Yükle</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="save-bar">
+        <span class="save-feedback" id="heroFeedback"><i class="fas fa-check-circle"></i> Kaydedildi!</span>
+        <button class="btn btn-primary" onclick="saveHero()"><i class="fas fa-save"></i> Kaydet</button>
+      </div>
+    </div>
+
+    <!-- ÜRÜNLER -->
+    <div class="tab-panel" id="tab-products">
+      <div class="page-header">
+        <div><h2>Ürünler</h2><p>Ürün ekle, düzenle veya sil</p></div>
+        <button class="btn btn-primary" onclick="openProductModal()"><i class="fas fa-plus"></i> Yeni Ürün</button>
+      </div>
+      <div class="card" style="padding:16px 20px;">
+        <div class="products-toolbar">
+          <input class="search-input" type="text" placeholder="Ürün ara..." oninput="filterProducts(this.value)" />
+          <span id="productCount" style="font-size:13px;color:var(--text-light);"></span>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
+      </div>
+    </div>
+
+    <!-- ŞİFRE -->
+    <div class="tab-panel" id="tab-password">
+      <div class="page-header">
+        <div><h2>Şifre Değiştir</h2><p>Admin giriş şifrenizi güncelleyin</p></div>
+      </div>
+      <div class="card pass-form">
+        <h3><i class="fas fa-lock"></i> Şifre Güncelle</h3>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label>Mevcut Şifre</label>
+          <input type="password" id="passOld" placeholder="Mevcut şifreniz" />
+        </div>
+        <div class="form-group" style="margin-bottom:14px;">
+          <label>Yeni Şifre</label>
+          <input type="password" id="passNew" placeholder="Yeni şifre" />
+        </div>
+        <div class="form-group" style="margin-bottom:20px;">
+          <label>Yeni Şifre (Tekrar)</label>
+          <input type="password" id="passNew2" placeholder="Yeni şifreyi tekrar girin" />
+        </div>
+        <button class="btn btn-primary" onclick="changePassword()"><i class="fas fa-save"></i> Şifreyi Güncelle</button>
+      </div>
+    </div>
+
+  </div><!-- /main-content -->
+</div><!-- /adminApp -->
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="productModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">Yeni Ürün Ekle</h3>
+      <button class="modal-close" onclick="closeProductModal()"><i class="fas fa-times"></i></button>
+    </div>
+    <input type="hidden" id="editProductId" value="" />
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Ürün Adı</label>
+      <input type="text" id="prodName" placeholder="Ürün adı" />
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Fiyat</label>
+      <input type="text" id="prodPrice" placeholder="150,00₺" />
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Görsel URL</label>
+      <input type="url" id="prodImg" placeholder="https://..." oninput="previewImg('prodImg','prodImgPreview')" />
+      <img id="prodImgPreview" class="img-preview" style="width:120px;height:100px;border-radius:8px;" />
+    </div>
+    <div class="form-group" style="margin-bottom:20px;">
+      <label style="text-transform:none;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;">
+        <input type="file" accept="image/*" style="display:none" onchange="uploadFileToField(this,'prodImg','prodImgPreview')" />
+        <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Dosyadan Görsel Yükle</span>
+      </label>
+    </div>
+    <div style="display:flex;gap:12px;justify-content:flex-end;">
+      <button class="btn btn-secondary" onclick="closeProductModal()">İptal</button>
+      <button class="btn btn-primary" onclick="saveProduct()"><i class="fas fa-save"></i> Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script src="site-data.js"></script>
+<script>
+  const ADMIN_KEY = 'ecem_admin_creds';
+
+  function getAdminCreds() {
+    try {
+      const c = localStorage.getItem(ADMIN_KEY);
+      if (c) return JSON.parse(c);
+    } catch(e) {}
+    return { username: 'admin', password: 'ecem2025' };
+  }
+
+  function doLogin() {
+    const u = document.getElementById('loginUser').value.trim();
+    const p = document.getElementById('loginPass').value;
+    const creds = getAdminCreds();
+    if (u === creds.username && p === creds.password) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').style.display = 'block';
+      loadAll();
+    } else {
+      document.getElementById('loginError').style.display = 'block';
+    }
+  }
+
+  function doLogout() {
+    document.getElementById('adminApp').style.display = 'none';
+    document.getElementById('loginScreen').style.display = 'flex';
+    document.getElementById('loginUser').value = '';
+    document.getElementById('loginPass').value = '';
+  }
+
+  function showTab(name) {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  function showToast(msg, isError) {
+    const t = document.getElementById('toast');
+    t.innerHTML = `<i class="fas fa-${isError ? 'times-circle' : 'check-circle'}"></i> ${msg}`;
+    t.className = 'toast' + (isError ? ' error' : '') + ' show';
+    setTimeout(() => t.className = 'toast' + (isError ? ' error' : ''), 3000);
+  }
+
+  function showFeedback(id) {
+    const el = document.getElementById(id);
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 3000);
+  }
+
+  function previewImg(inputId, previewId) {
+    const val = document.getElementById(inputId).value;
+    const prev = document.getElementById(previewId);
+    if (val) { prev.src = val; prev.classList.add('show'); }
+    else { prev.classList.remove('show'); }
+  }
+
+  function uploadFileToField(input, fieldId, previewId) {
+    const file = input.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById(fieldId).value = e.target.result;
+      const prev = document.getElementById(previewId);
+      if (prev) { prev.src = e.target.result; prev.classList.add('show'); }
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function uploadLogoFile(input) {
+    uploadFileToField(input, 'logo_img_url', 'logoImgPreview');
+  }
+
+  // ── LOAD ALL ──
+  function loadAll() {
+    const d = getSiteData();
+
+    // Stats
+    document.getElementById('statProducts').textContent = d.products.length;
+    document.getElementById('statWa').textContent = d.phone;
+    document.getElementById('statEmail').textContent = d.email;
+
+    // Genel
+    setVal('announce', d.announce);
+    setVal('logo_text', d.logo_text);
+    setVal('logo_sub', d.logo_sub);
+    setVal('logo_img_url', d.logo_img);
+    setVal('address', d.address);
+    setVal('phone', d.phone);
+    setVal('email', d.email);
+    setVal('whatsapp', d.whatsapp);
+    setVal('social_fb', d.social_fb);
+    setVal('social_ig', d.social_ig);
+    setVal('social_tt', d.social_tt);
+    if (d.logo_img) previewImg('logo_img_url', 'logoImgPreview');
+
+    // About
+    setVal('about_text1', d.about_text1);
+    setVal('about_text2', d.about_text2);
+    setVal('about_img', d.about_img);
+    if (d.about_img) previewImg('about_img', 'aboutImgPreview');
+
+    // Hero
+    setVal('hero_tag', d.hero_tag);
+    setVal('hero_title', d.hero_title);
+    setVal('hero_subtitle', d.hero_subtitle);
+    setVal('hero_img', d.hero_img);
+    if (d.hero_img) previewImg('hero_img', 'heroImgPreview');
+
+    // Products
+    renderProducts(d.products);
+  }
+
+  function setVal(id, val) {
+    const el = document.getElementById(id);
+    if (el) el.value = val || '';
+  }
+  function getVal(id) {
+    const el = document.getElementById(id);
+    return el ? el.value : '';
+  }
+
+  // ── SAVE GENEL ──
+  function saveGenel() {
+    const d = getSiteData();
+    d.announce = getVal('announce');
+    d.logo_text = getVal('logo_text');
+    d.logo_sub = getVal('logo_sub');
+    d.logo_img = getVal('logo_img_url');
+    d.address = getVal('address');
+    d.phone = getVal('phone');
+    d.email = getVal('email');
+    d.whatsapp = getVal('whatsapp');
+    d.social_fb = getVal('social_fb');
+    d.social_ig = getVal('social_ig');
+    d.social_tt = getVal('social_tt');
+    saveSiteData(d);
+    showToast('Site ayarları kaydedildi!');
+    showFeedback('genelFeedback');
+  }
+
+  // ── SAVE ABOUT ──
+  function saveAbout() {
+    const d = getSiteData();
+    d.about_text1 = getVal('about_text1');
+    d.about_text2 = getVal('about_text2');
+    d.about_img = getVal('about_img');
+    saveSiteData(d);
+    showToast('Hakkımızda sayfası kaydedildi!');
+    showFeedback('aboutFeedback');
+  }
+
+  // ── SAVE HERO ──
+  function saveHero() {
+    const d = getSiteData();
+    d.hero_tag = getVal('hero_tag');
+    d.hero_title = getVal('hero_title');
+    d.hero_subtitle = getVal('hero_subtitle');
+    d.hero_img = getVal('hero_img');
+    saveSiteData(d);
+    showToast('Ana sayfa kaydedildi!');
+    showFeedback('heroFeedback');
+  }
+
+  // ── PRODUCTS ──
+  let allProducts = [];
+
+  function renderProducts(products) {
+    allProducts = products;
+    updateProductCount(products.length);
+    const grid = document.getElementById('productsGrid');
+    grid.innerHTML = products.map((p, idx) => `
+      <div class="prod-admin-card">
+        <img src="${p.img || ''}" alt="${p.name}" onerror="this.style.background='#f0ebe6';this.src=''" />
+        <div class="prod-admin-info">
+          <h4>${p.name}</h4>
+          <div class="prod-price">${p.price}</div>
+          <div class="prod-admin-actions">
+            <button class="btn btn-outline btn-sm" onclick="editProduct(${p.id})"><i class="fas fa-pen"></i></button>
+            <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function updateProductCount(n) {
+    document.getElementById('productCount').textContent = n + ' ürün';
+    document.getElementById('statProducts').textContent = n;
+  }
+
+  function filterProducts(q) {
+    const filtered = allProducts.filter(p => p.name.toLowerCase().includes(q.toLowerCase()));
+    renderProducts(filtered);
+  }
+
+  function openProductModal(id) {
+    document.getElementById('modalTitle').textContent = 'Yeni Ürün Ekle';
+    document.getElementById('editProductId').value = '';
+    document.getElementById('prodName').value = '';
+    document.getElementById('prodPrice').value = '';
+    document.getElementById('prodImg').value = '';
+    document.getElementById('prodImgPreview').classList.remove('show');
+    document.getElementById('productModal').classList.add('open');
+  }
+
+  function closeProductModal() {
+    document.getElementById('productModal').classList.remove('open');
+  }
+
+  function editProduct(id) {
+    const d = getSiteData();
+    const p = d.products.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('modalTitle').textContent = 'Ürün Düzenle';
+    document.getElementById('editProductId').value = id;
+    document.getElementById('prodName').value = p.name;
+    document.getElementById('prodPrice').value = p.price;
+    document.getElementById('prodImg').value = p.img;
+    const prev = document.getElementById('prodImgPreview');
+    if (p.img) { prev.src = p.img; prev.classList.add('show'); }
+    document.getElementById('productModal').classList.add('open');
+  }
+
+  function saveProduct() {
+    const name = document.getElementById('prodName').value.trim();
+    const price = document.getElementById('prodPrice').value.trim();
+    const img = document.getElementById('prodImg').value.trim();
+    if (!name || !price) { showToast('Ürün adı ve fiyat zorunlu!', true); return; }
+
+    const d = getSiteData();
+    const editId = document.getElementById('editProductId').value;
+
+    if (editId) {
+      const idx = d.products.findIndex(x => x.id == editId);
+      if (idx !== -1) { d.products[idx].name = name; d.products[idx].price = price; d.products[idx].img = img; }
+    } else {
+      const maxId = d.products.length ? Math.max(...d.products.map(x => x.id)) : 0;
+      d.products.push({ id: maxId + 1, name, price, img });
+    }
+
+    saveSiteData(d);
+    renderProducts(d.products);
+    closeProductModal();
+    showToast(editId ? 'Ürün güncellendi!' : 'Ürün eklendi!');
+  }
+
+  function deleteProduct(id) {
+    if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
+    const d = getSiteData();
+    d.products = d.products.filter(x => x.id !== id);
+    saveSiteData(d);
+    renderProducts(d.products);
+    showToast('Ürün silindi!');
+  }
+
+  // ── PASSWORD ──
+  function changePassword() {
+    const old = document.getElementById('passOld').value;
+    const n1 = document.getElementById('passNew').value;
+    const n2 = document.getElementById('passNew2').value;
+    const creds = getAdminCreds();
+
+    if (old !== creds.password) { showToast('Mevcut şifre hatalı!', true); return; }
+    if (n1.length < 4) { showToast('Yeni şifre en az 4 karakter olmalı!', true); return; }
+    if (n1 !== n2) { showToast('Yeni şifreler eşleşmiyor!', true); return; }
+
+    localStorage.setItem(ADMIN_KEY, JSON.stringify({ username: creds.username, password: n1 }));
+    document.getElementById('passOld').value = '';
+    document.getElementById('passNew').value = '';
+    document.getElementById('passNew2').value = '';
+    showToast('Şifre başarıyla güncellendi!');
+  }
+
+  // Close modal on overlay click
+  document.getElementById('productModal').addEventListener('click', function(e) {
+    if (e.target === this) closeProductModal();
+  });
+</script>
+</body>
+</html>
