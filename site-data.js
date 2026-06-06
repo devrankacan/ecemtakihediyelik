@@ -70,16 +70,29 @@ function applyCommon(data) {
   if (ann) ann.textContent = data.announce;
 
   // Logo
-  const logos = document.querySelectorAll('.logo-text strong');
-  logos.forEach(el => el.textContent = data.logo_text);
-  const logosubs = document.querySelectorAll('.logo-text span');
-  logosubs.forEach(el => el.textContent = data.logo_sub);
+  document.querySelectorAll('.logo-text strong').forEach(el => el.textContent = data.logo_text);
+  document.querySelectorAll('.logo-text span').forEach(el => el.textContent = data.logo_sub);
 
-  // Logo image
-  const logoIcons = document.querySelectorAll('.logo-icon');
-  logoIcons.forEach(el => {
+  // Logo image: if set, show only image; hide icon circle and text
+  document.querySelectorAll('.logo').forEach(logoEl => {
+    const icon = logoEl.querySelector('.logo-icon');
+    const text = logoEl.querySelector('.logo-text');
+    let imgEl = logoEl.querySelector('.logo-img-custom');
     if (data.logo_img) {
-      el.innerHTML = `<img src="${data.logo_img}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="Logo">`;
+      if (!imgEl) {
+        imgEl = document.createElement('img');
+        imgEl.className = 'logo-img-custom';
+        imgEl.style.cssText = 'height:48px;max-width:160px;object-fit:contain;display:block;';
+        imgEl.alt = data.logo_text || 'Logo';
+        logoEl.insertBefore(imgEl, logoEl.firstChild);
+      }
+      imgEl.src = data.logo_img;
+      if (icon) icon.style.display = 'none';
+      if (text) text.style.display = 'none';
+    } else {
+      if (imgEl) imgEl.remove();
+      if (icon) icon.style.display = '';
+      if (text) text.style.display = '';
     }
   });
 
