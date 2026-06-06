@@ -319,6 +319,11 @@
       gap: 6px;
       background: #fff9f6;
     }
+    .prod-category {
+      font-size: 10px; font-weight: 600;
+      color: var(--murd); letter-spacing: 1px;
+      text-transform: uppercase; opacity: .7;
+    }
     .product-card .prod-info h3 {
       font-size: 13px; font-weight: 600;
       color: #3a2020; line-height: 1.4; text-decoration: none;
@@ -1030,6 +1035,7 @@
             <img class="prod-img" src="${p.img}" alt="${p.name}" />
           </a>
           <div class="prod-info">
+            ${p.category ? `<div class="prod-category">${p.category}</div>` : ''}
             <h3>${p.name}</h3>
             <div class="price">${p.price}</div>
           </div>
@@ -1053,6 +1059,7 @@
             <img class="prod-img" src="${p.img}" alt="${p.name}" />
           </a>
           <div class="prod-info">
+            ${p.category ? `<div class="prod-category">${p.category}</div>` : ''}
             <h3>${p.name}</h3>
             <div class="price">${p.price}</div>
           </div>
