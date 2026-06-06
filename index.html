@@ -351,6 +351,31 @@
     }
     .btn-detail:hover { background: var(--murd); color: white; border-color: var(--murd); }
 
+    /* ── FEATURED PRODUCTS GRID ── */
+    .featured-products {
+      background: var(--white);
+      padding: 64px 24px;
+    }
+    .featured-products-header {
+      max-width: 1100px;
+      margin: 0 auto 36px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .featured-products-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--murd);
+      margin-bottom: 8px;
+    }
+    .featured-products .products-grid {
+      max-width: 1100px;
+      margin: auto;
+    }
+
     /* ── PRODUCTS SLIDER ── */
     .products-slider {
       background: #faf7f4;
@@ -597,7 +622,7 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .hero-title { font-size: clamp(30px, 4vw, 48px); }
-      .featured-grid { grid-template-columns: repeat(3, 1fr); }
+      .featured-products .products-grid { grid-template-columns: repeat(4, 1fr); }
       .features-grid { grid-template-columns: repeat(2, 1fr); }
     }
 
@@ -611,7 +636,7 @@
       .hero-title { font-size: clamp(28px, 7vw, 40px); }
       .hero-subtitle { font-size: 14px; max-width: 100%; }
       .btn-primary { min-height: 44px; display: inline-flex; align-items: center; }
-      .featured-grid { grid-template-columns: repeat(2, 1fr); }
+      .featured-products .products-grid { grid-template-columns: repeat(2, 1fr); }
       .features-grid { grid-template-columns: 1fr; }
       .values-inner { grid-template-columns: 1fr; gap: 32px; }
       .values-img { display: none; }
@@ -626,7 +651,7 @@
     @media (max-width: 480px) {
       .hero { padding: 36px 16px; }
       .hero-title { font-size: clamp(24px, 8vw, 34px); }
-      .featured-grid { grid-template-columns: 1fr; }
+      .featured-products .products-grid { grid-template-columns: repeat(2, 1fr); }
       .values-list { grid-template-columns: 1fr; }
       .product-card { flex: 0 0 100%; }
       .categories { padding: 40px 16px; }
@@ -840,70 +865,17 @@
   </div>
 </section>
 
-<!-- FEATURED BANNER + GRID -->
-<section class="featured">
-  <div class="featured-banner">
-    <h2>Işıltılı Dünyamıza Göz Atın</h2>
-    <p>Kendinizi özel hissettirecek, modayı yansıtan ve zamansız parçalar bir arada. Hikayenizi tamamlayacak takıyı seçin.</p>
+<!-- FEATURED PRODUCTS GRID -->
+<section class="featured-products">
+  <div class="featured-products-header">
+    <div>
+      <p class="section-tag" style="font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--murd);font-weight:600;margin-bottom:6px;">Koleksiyonumuz</p>
+      <h2>Işıltılı Dünyamıza Göz Atın</h2>
+      <div class="sec-divider"></div>
+    </div>
+    <a href="urunler.html" class="btn-all"><i class="fas fa-grid-2"></i> Tüm Ürünler</a>
   </div>
-  <div class="featured-grid">
-
-    <div class="fg-item">
-      <img src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=400&q=80" alt="Zippo Çakmak" />
-      <div class="fg-overlay">
-        <h3>Zippo Çakmak</h3>
-        <div class="price">150,00₺</div>
-        <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Zippo%20Çakmak%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-          <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
-        </a>
-      </div>
-    </div>
-
-    <div class="fg-item">
-      <img src="https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=400&q=80" alt="Bakır Bilezik" />
-      <div class="fg-overlay">
-        <h3>Bakır Bilezik</h3>
-        <div class="price">250,00₺</div>
-        <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Bakır%20Bilezik%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-          <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
-        </a>
-      </div>
-    </div>
-
-    <div class="fg-item">
-      <img src="https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=400&q=80" alt="Beyaz Bere" />
-      <div class="fg-overlay">
-        <h3>Beyaz Bere</h3>
-        <div class="price">175,00₺</div>
-        <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Beyaz%20Bere%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-          <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
-        </a>
-      </div>
-    </div>
-
-    <div class="fg-item">
-      <img src="https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=400&q=80" alt="Deri Eldiven" />
-      <div class="fg-overlay">
-        <h3>Deri Eldiven</h3>
-        <div class="price">400,00₺</div>
-        <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Deri%20Eldiven%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-          <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
-        </a>
-      </div>
-    </div>
-
-    <div class="fg-item">
-      <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&q=80" alt="Zarif Çelik Kolye" />
-      <div class="fg-overlay">
-        <h3>Zarif Çelik Kolye</h3>
-        <div class="price">300,00₺</div>
-        <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Zarif%20Çelik%20Kolye%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-          <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
-        </a>
-      </div>
-    </div>
-
-  </div>
+  <div class="products-grid" id="featuredGrid"></div>
 </section>
 
 <!-- FEATURES -->
@@ -1048,15 +1020,28 @@
     const heroImg = document.getElementById('heroImg');
     if (heroImg && d.hero_img) heroImg.src = d.hero_img;
 
-    // WhatsApp slider cards
-    document.querySelectorAll('[data-wa="product"]').forEach(el => {
-      const name = el.closest('.product-card')?.querySelector('h3')?.textContent || '';
-      el.href = waLink(d, name);
-    });
-    document.querySelectorAll('[data-wa="fg"]').forEach(el => {
-      const name = el.closest('.fg-item')?.querySelector('h3')?.textContent || '';
-      el.href = waLink(d, name);
-    });
+    // Featured products grid
+    const featuredGrid = document.getElementById('featuredGrid');
+    if (featuredGrid && d.products.length) {
+      const picks = d.products.slice(0, 8);
+      featuredGrid.innerHTML = picks.map(p => `
+        <div class="product-card">
+          <a href="urun-detay.html?id=${p.id}" class="prod-img-wrap">
+            <img class="prod-img" src="${p.img}" alt="${p.name}" />
+          </a>
+          <div class="prod-info">
+            <h3>${p.name}</h3>
+            <div class="price">${p.price}</div>
+          </div>
+          <div class="prod-actions">
+            <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
+              <i class="fab fa-whatsapp"></i> Sipariş Ver
+            </a>
+            <a href="urun-detay.html?id=${p.id}" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
+          </div>
+        </div>
+      `).join('');
+    }
 
     // Slider products from data
     const track = document.getElementById('sliderTrack');
