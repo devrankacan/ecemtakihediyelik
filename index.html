@@ -244,179 +244,112 @@
     .cat-item:hover .cat-circle { transform: scale(1.1); background: var(--murd-dark); }
     .cat-item span { font-size: 13px; font-weight: 500; color: var(--text); text-align: center; }
 
-    /* ── PRODUCTS SLIDER ── */
-    .products-slider {
-      background: var(--cream);
-      padding: 60px 0;
+    /* ── PRODUCTS GRID (Ana Sayfa) ── */
+    .products-section {
+      background: #faf7f4;
+      padding: 64px 24px;
     }
-    .products-slider h2 {
-      text-align: center;
+    .products-section-header {
+      max-width: 1100px;
+      margin: 0 auto 36px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .products-section-header h2 {
       font-family: 'Playfair Display', serif;
       font-size: 28px;
       color: var(--murd);
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .products-slider .divider {
-      width: 60px;
-      height: 3px;
-      background: var(--murd);
-      margin: 0 auto 40px;
-      border-radius: 2px;
+    .products-section-header p { font-size: 14px; color: var(--text-light); }
+    .sec-divider { width: 48px; height: 3px; background: var(--murd); border-radius: 2px; opacity: .5; margin-top: 8px; }
+    .btn-all {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: transparent; border: 1.5px solid var(--murd);
+      color: var(--murd); padding: 10px 20px; border-radius: 8px;
+      text-decoration: none; font-size: 13px; font-weight: 600;
+      transition: all .2s; white-space: nowrap;
     }
-    .slider-wrapper {
-      position: relative;
+    .btn-all:hover { background: var(--murd); color: white; }
+
+    .products-grid {
       max-width: 1100px;
       margin: auto;
-      padding: 0 48px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
     }
-    .slider-track {
-      display: flex;
-      gap: 24px;
-      overflow: hidden;
-    }
+
     .product-card {
-      flex: 0 0 calc(33.333% - 16px);
-      background: white;
+      background: #fff9f6;
+      border: 1px solid #ecddd5;
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 12px rgba(0,0,0,.08);
-      transition: transform .2s;
-    }
-    .product-card:hover { transform: translateY(-4px); }
-    .product-img {
-      width: 100%;
-      aspect-ratio: 3/2.5;
-      object-fit: cover;
-      background: var(--cream2);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      color: var(--murd);
-      opacity: .4;
+      flex-direction: column;
+      transition: transform .22s, box-shadow .22s, border-color .22s;
     }
-    .product-img img { width: 100%; height: 100%; object-fit: cover; }
-    .product-info {
-      background: var(--murd);
-      padding: 16px;
-      text-align: center;
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(123,27,58,.1);
+      border-color: #d4a8b4;
     }
-    .product-info h3 { color: white; font-size: 15px; font-weight: 600; margin-bottom: 6px; }
-    .product-info .price { color: white; font-size: 16px; font-weight: 700; margin-bottom: 14px; }
-    .btn-wa {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--wa);
-      color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      transition: background .2s;
-    }
-    .btn-wa:hover { background: var(--wa-dark); }
-
-    .slider-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--murd);
-      color: white;
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 16px;
-      transition: background .2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .slider-btn:hover { background: var(--murd-dark); }
-    .slider-btn.prev { left: 0; }
-    .slider-btn.next { right: 0; }
-
-    .slider-dots {
-      display: flex;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 24px;
-    }
-    .slider-dots span {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ccc;
-      cursor: pointer;
-      transition: background .2s;
-    }
-    .slider-dots span.active { background: var(--murd); }
-
-    /* ── FEATURED PRODUCTS GRID ── */
-    .featured {
-      padding: 0;
-    }
-    .featured-banner {
-      background: linear-gradient(rgba(90,10,30,.7), rgba(90,10,30,.7)), url('https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=1400&q=80') center/cover;
-      padding: 64px 24px;
-      text-align: center;
-      color: white;
-    }
-    .featured-banner h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(28px, 4vw, 42px);
-      margin-bottom: 12px;
-    }
-    .featured-banner p {
-      font-size: 14px;
-      opacity: .85;
-      max-width: 560px;
-      margin: auto;
-      line-height: 1.7;
-    }
-    .featured-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 0;
-      background: var(--murd);
-    }
-    .fg-item {
-      position: relative;
+    .product-card .prod-img-wrap {
       overflow: hidden;
-      cursor: pointer;
-    }
-    .fg-item img {
-      width: 100%;
       aspect-ratio: 1;
+      background: var(--cream2);
+      display: block;
+      text-decoration: none;
+    }
+    .product-card .prod-img {
+      width: 100%; height: 100%;
       object-fit: cover;
       display: block;
-      transition: transform .3s;
+      transition: transform .35s;
     }
-    .fg-item:hover img { transform: scale(1.06); }
-    .fg-item-placeholder {
-      width: 100%;
-      aspect-ratio: 1;
-      background: var(--cream2);
+    .product-card:hover .prod-img { transform: scale(1.05); }
+    .product-card .prod-info {
+      padding: 14px 14px 10px;
+      flex: 1;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 40px;
-      color: var(--murd);
-      opacity: .5;
+      flex-direction: column;
+      gap: 6px;
+      background: #fff9f6;
     }
-    .fg-overlay {
-      position: absolute;
-      bottom: 0; left: 0; right: 0;
-      background: var(--murd);
-      padding: 12px;
-      text-align: center;
+    .product-card .prod-info h3 {
+      font-size: 13px; font-weight: 600;
+      color: #3a2020; line-height: 1.4; text-decoration: none;
     }
-    .fg-overlay h3 { color: white; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
-    .fg-overlay .price { color: white; font-size: 13px; margin-bottom: 10px; }
-    .fg-overlay .btn-wa { padding: 7px 14px; font-size: 12px; }
+    .product-card .prod-info .price {
+      font-size: 16px; font-weight: 700;
+      color: var(--murd); margin-top: auto; padding-top: 6px;
+    }
+    .product-card .prod-actions {
+      padding: 0 14px 14px;
+      display: flex; gap: 7px;
+      background: #fff9f6;
+    }
+    .btn-wa {
+      flex: 1;
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      background: #2cb954; color: white;
+      padding: 9px 12px; border-radius: 7px;
+      text-decoration: none; font-size: 12px; font-weight: 600;
+      transition: background .2s; min-height: 38px;
+    }
+    .btn-wa:hover { background: var(--wa-dark); }
+    .btn-detail {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 7px;
+      background: #f5eaee; color: var(--murd);
+      text-decoration: none; font-size: 13px;
+      border: 1px solid #ecddd5; flex-shrink: 0;
+      transition: background .2s, color .2s;
+    }
+    .btn-detail:hover { background: var(--murd); color: white; border-color: var(--murd); }
 
     /* ── FEATURES ── */
     .features { padding: 80px 24px; background: var(--white); }
@@ -727,80 +660,98 @@
     <div class="slider-track" id="sliderTrack">
 
       <div class="product-card">
-        <div class="product-img">
-          <img src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&q=80" alt="Adalet Heykeli" />
-        </div>
-        <div class="product-info">
+        <a href="urun-detay.html?id=6" class="prod-img-wrap">
+          <img class="prod-img" src="https://images.unsplash.com/photo-1589578527966-fdac0f44566c?w=600&q=80" alt="Adalet Heykeli" />
+        </a>
+        <div class="prod-info">
           <h3>Adalet Heykeli</h3>
           <div class="price">2.500,00₺</div>
+        </div>
+        <div class="prod-actions">
           <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Adalet%20Heykeli%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+            <i class="fab fa-whatsapp"></i> Sipariş Ver
           </a>
+          <a href="urun-detay.html?id=6" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
         </div>
       </div>
 
       <div class="product-card">
-        <div class="product-img">
-          <img src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80" alt="Zarif Çelik Kolye" />
-        </div>
-        <div class="product-info">
+        <a href="urun-detay.html?id=7" class="prod-img-wrap">
+          <img class="prod-img" src="https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=600&q=80" alt="Zarif Çelik Kolye" />
+        </a>
+        <div class="prod-info">
           <h3>Zarif Çelik Kolye</h3>
           <div class="price">300,00₺</div>
+        </div>
+        <div class="prod-actions">
           <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Zarif%20Çelik%20Kolye%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+            <i class="fab fa-whatsapp"></i> Sipariş Ver
           </a>
+          <a href="urun-detay.html?id=7" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
         </div>
       </div>
 
       <div class="product-card">
-        <div class="product-img">
-          <img src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80" alt="Ehram Çocuk Takım" />
-        </div>
-        <div class="product-info">
-          <h3>Ehram Çocuk Takım</h3>
+        <a href="urun-detay.html?id=8" class="prod-img-wrap">
+          <img class="prod-img" src="https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=600&q=80" alt="Ehram Takım" />
+        </a>
+        <div class="prod-info">
+          <h3>Ehram Takım</h3>
           <div class="price">5.000,00₺</div>
-          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Ehram%20Çocuk%20Takım%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+        </div>
+        <div class="prod-actions">
+          <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Ehram%20Takım%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
+            <i class="fab fa-whatsapp"></i> Sipariş Ver
           </a>
+          <a href="urun-detay.html?id=8" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
         </div>
       </div>
 
       <div class="product-card">
-        <div class="product-img">
-          <img src="https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=600&q=80" alt="Bakır Bilezik" />
-        </div>
-        <div class="product-info">
+        <a href="urun-detay.html?id=2" class="prod-img-wrap">
+          <img class="prod-img" src="https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=600&q=80" alt="Bakır Bilezik" />
+        </a>
+        <div class="prod-info">
           <h3>Bakır Bilezik</h3>
           <div class="price">250,00₺</div>
+        </div>
+        <div class="prod-actions">
           <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Bakır%20Bilezik%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+            <i class="fab fa-whatsapp"></i> Sipariş Ver
           </a>
+          <a href="urun-detay.html?id=2" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
         </div>
       </div>
 
       <div class="product-card">
-        <div class="product-img">
-          <img src="https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80" alt="Deri Eldiven" />
-        </div>
-        <div class="product-info">
+        <a href="urun-detay.html?id=4" class="prod-img-wrap">
+          <img class="prod-img" src="https://images.unsplash.com/photo-1614252235316-8c857d38b5f4?w=600&q=80" alt="Deri Eldiven" />
+        </a>
+        <div class="prod-info">
           <h3>Deri Eldiven</h3>
           <div class="price">400,00₺</div>
+        </div>
+        <div class="prod-actions">
           <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Deri%20Eldiven%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+            <i class="fab fa-whatsapp"></i> Sipariş Ver
           </a>
+          <a href="urun-detay.html?id=4" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
         </div>
       </div>
 
       <div class="product-card">
-        <div class="product-img">
-          <img src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&q=80" alt="Zippo Çakmak" />
-        </div>
-        <div class="product-info">
+        <a href="urun-detay.html?id=1" class="prod-img-wrap">
+          <img class="prod-img" src="https://images.unsplash.com/photo-1547996160-81dfa63595aa?w=600&q=80" alt="Zippo Çakmak" />
+        </a>
+        <div class="prod-info">
           <h3>Zippo Çakmak</h3>
           <div class="price">150,00₺</div>
+        </div>
+        <div class="prod-actions">
           <a href="https://api.whatsapp.com/send/?phone=904582113434&text=Zippo%20Çakmak%20için%20bilgi%20almak%20istiyorum&type=phone_number&app_absent=0" class="btn-wa" target="_blank">
-            <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+            <i class="fab fa-whatsapp"></i> Sipariş Ver
           </a>
+          <a href="urun-detay.html?id=1" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
         </div>
       </div>
 
@@ -1076,13 +1027,18 @@
       const shown = d.products.slice(0, 9);
       track.innerHTML = shown.map(p => `
         <div class="product-card">
-          <div class="product-img"><img src="${p.img}" alt="${p.name}" /></div>
-          <div class="product-info">
+          <a href="urun-detay.html?id=${p.id}" class="prod-img-wrap">
+            <img class="prod-img" src="${p.img}" alt="${p.name}" />
+          </a>
+          <div class="prod-info">
             <h3>${p.name}</h3>
             <div class="price">${p.price}</div>
+          </div>
+          <div class="prod-actions">
             <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
-              <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
+              <i class="fab fa-whatsapp"></i> Sipariş Ver
             </a>
+            <a href="urun-detay.html?id=${p.id}" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
           </div>
         </div>
       `).join('');
