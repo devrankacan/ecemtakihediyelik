@@ -351,6 +351,85 @@
     }
     .btn-detail:hover { background: var(--murd); color: white; border-color: var(--murd); }
 
+    /* ── PRODUCTS SLIDER ── */
+    .products-slider {
+      background: #faf7f4;
+      padding: 64px 24px;
+    }
+    .products-slider h2 {
+      text-align: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: var(--murd);
+      margin-bottom: 8px;
+    }
+    .products-slider .divider {
+      width: 60px; height: 3px;
+      background: var(--murd);
+      border-radius: 2px;
+      margin: 0 auto 40px;
+    }
+    .slider-wrapper {
+      position: relative;
+      max-width: 1100px;
+      margin: auto;
+      overflow: hidden;
+      padding-bottom: 40px;
+    }
+    .slider-track {
+      display: flex;
+      gap: 24px;
+      transition: transform .4s ease;
+    }
+    .slider-track .product-card {
+      flex: 0 0 calc(33.333% - 16px);
+      min-width: 0;
+    }
+    .slider-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-60%);
+      z-index: 10;
+      background: white;
+      border: 1px solid #ecddd5;
+      color: var(--murd);
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, color .2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+    .slider-btn:hover { background: var(--murd); color: white; }
+    .slider-btn.prev { left: -20px; }
+    .slider-btn.next { right: -20px; }
+    .slider-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 8px;
+    }
+    .slider-dots span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: #ddd5cc;
+      cursor: pointer;
+      transition: background .2s;
+    }
+    .slider-dots span.active { background: var(--murd); }
+
+    @media (max-width: 900px) {
+      .slider-track .product-card { flex: 0 0 calc(50% - 12px); }
+      .slider-btn.prev { left: 0; }
+      .slider-btn.next { right: 0; }
+    }
+    @media (max-width: 560px) {
+      .slider-track .product-card { flex: 0 0 calc(100% - 0px); }
+    }
+
     /* ── FEATURES ── */
     .features { padding: 80px 24px; background: var(--white); }
     .features .section-tag {
