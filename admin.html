@@ -666,11 +666,17 @@
     </div>
     <input type="hidden" id="editProductId" value="" />
     <div class="form-group" style="margin-bottom:14px;">
-      <label>Ürün Adı</label>
+      <label>Ürün Adı *</label>
       <input type="text" id="prodName" placeholder="Ürün adı" />
     </div>
     <div class="form-group" style="margin-bottom:14px;">
-      <label>Fiyat</label>
+      <label>Kategori *</label>
+      <select id="prodCategory">
+        <option value="">— Kategori seçin —</option>
+      </select>
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Fiyat *</label>
       <input type="text" id="prodPrice" placeholder="150,00₺" />
     </div>
     <div class="form-group" style="margin-bottom:14px;">
@@ -876,6 +882,7 @@
         <img src="${p.img || ''}" alt="${p.name}" onerror="this.style.background='#f0ebe6';this.src=''" />
         <div class="prod-admin-info">
           <h4>${p.name}</h4>
+          ${p.category ? `<div style="font-size:11px;color:#888;margin-bottom:4px;">${p.category}</div>` : ''}
           <div class="prod-price">${p.price}</div>
           <div class="prod-admin-actions">
             <a href="urun-detay.html?id=${p.id}" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></a>
@@ -897,6 +904,19 @@
     renderProducts(filtered);
   }
 
+  function fillCategorySelect(selected) {
+    const d = getSiteData();
+    const sel = document.getElementById('prodCategory');
+    sel.innerHTML = '<option value="">— Kategori seçin —</option>';
+    (d.categories || []).forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      if (c === selected) opt.selected = true;
+      sel.appendChild(opt);
+    });
+  }
+
   function openProductModal() {
     document.getElementById('modalTitle').textContent = 'Yeni Ürün Ekle';
     document.getElementById('editProductId').value = '';
@@ -905,6 +925,7 @@
     document.getElementById('prodImg').value = '';
     document.getElementById('prodDesc').value = '';
     document.getElementById('prodImgPreview').classList.remove('show');
+    fillCategorySelect('');
     document.getElementById('productModal').classList.add('open');
   }
 
@@ -922,6 +943,7 @@
     document.getElementById('prodPrice').value = p.price;
     document.getElementById('prodImg').value = p.img;
     document.getElementById('prodDesc').value = p.description || '';
+    fillCategorySelect(p.category || '');
     const prev = document.getElementById('prodImgPreview');
     if (p.img) { prev.src = p.img; prev.classList.add('show'); }
     document.getElementById('productModal').classList.add('open');
@@ -929,20 +951,21 @@
 
   function saveProduct() {
     const name = document.getElementById('prodName').value.trim();
+    const category = document.getElementById('prodCategory').value;
     const price = document.getElementById('prodPrice').value.trim();
     const img = document.getElementById('prodImg').value.trim();
     const description = document.getElementById('prodDesc').value.trim();
-    if (!name || !price) { showToast('Ürün adı ve fiyat zorunlu!', true); return; }
+    if (!name || !category || !price) { showToast('Ürün adı, kategori ve fiyat zorunlu!', true); return; }
 
     const d = getSiteData();
     const editId = document.getElementById('editProductId').value;
 
     if (editId) {
       const idx = d.products.findIndex(x => x.id == editId);
-      if (idx !== -1) { d.products[idx].name = name; d.products[idx].price = price; d.products[idx].img = img; d.products[idx].description = description; }
+      if (idx !== -1) { d.products[idx].name = name; d.products[idx].category = category; d.products[idx].price = price; d.products[idx].img = img; d.products[idx].description = description; }
     } else {
       const maxId = d.products.length ? Math.max(...d.products.map(x => x.id)) : 0;
-      d.products.push({ id: maxId + 1, name, price, img, description });
+      d.products.push({ id: maxId + 1, name, category, price, img, description });
     }
 
     saveSiteData(d);
