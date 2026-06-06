@@ -678,11 +678,15 @@
       <input type="url" id="prodImg" placeholder="https://..." oninput="previewImg('prodImg','prodImgPreview')" />
       <img id="prodImgPreview" class="img-preview" style="width:120px;height:100px;border-radius:8px;" />
     </div>
-    <div class="form-group" style="margin-bottom:20px;">
+    <div class="form-group" style="margin-bottom:14px;">
       <label style="text-transform:none;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;">
         <input type="file" accept="image/*" style="display:none" onchange="uploadFileToField(this,'prodImg','prodImgPreview')" />
         <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Dosyadan Görsel Yükle</span>
       </label>
+    </div>
+    <div class="form-group" style="margin-bottom:20px;">
+      <label>Ürün Açıklaması</label>
+      <textarea id="prodDesc" rows="4" placeholder="Ürün hakkında detaylı bilgi girin... (malzeme, boyut, renk seçenekleri vb.)"></textarea>
     </div>
     <div style="display:flex;gap:12px;justify-content:flex-end;">
       <button class="btn btn-secondary" onclick="closeProductModal()">İptal</button>
@@ -874,6 +878,7 @@
           <h4>${p.name}</h4>
           <div class="prod-price">${p.price}</div>
           <div class="prod-admin-actions">
+            <a href="urun-detay.html?id=${p.id}" target="_blank" class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></a>
             <button class="btn btn-outline btn-sm" onclick="editProduct(${p.id})"><i class="fas fa-pen"></i></button>
             <button class="btn btn-danger btn-sm" onclick="deleteProduct(${p.id})"><i class="fas fa-trash"></i></button>
           </div>
@@ -892,12 +897,13 @@
     renderProducts(filtered);
   }
 
-  function openProductModal(id) {
+  function openProductModal() {
     document.getElementById('modalTitle').textContent = 'Yeni Ürün Ekle';
     document.getElementById('editProductId').value = '';
     document.getElementById('prodName').value = '';
     document.getElementById('prodPrice').value = '';
     document.getElementById('prodImg').value = '';
+    document.getElementById('prodDesc').value = '';
     document.getElementById('prodImgPreview').classList.remove('show');
     document.getElementById('productModal').classList.add('open');
   }
@@ -915,6 +921,7 @@
     document.getElementById('prodName').value = p.name;
     document.getElementById('prodPrice').value = p.price;
     document.getElementById('prodImg').value = p.img;
+    document.getElementById('prodDesc').value = p.description || '';
     const prev = document.getElementById('prodImgPreview');
     if (p.img) { prev.src = p.img; prev.classList.add('show'); }
     document.getElementById('productModal').classList.add('open');
@@ -924,6 +931,7 @@
     const name = document.getElementById('prodName').value.trim();
     const price = document.getElementById('prodPrice').value.trim();
     const img = document.getElementById('prodImg').value.trim();
+    const description = document.getElementById('prodDesc').value.trim();
     if (!name || !price) { showToast('Ürün adı ve fiyat zorunlu!', true); return; }
 
     const d = getSiteData();
@@ -931,10 +939,10 @@
 
     if (editId) {
       const idx = d.products.findIndex(x => x.id == editId);
-      if (idx !== -1) { d.products[idx].name = name; d.products[idx].price = price; d.products[idx].img = img; }
+      if (idx !== -1) { d.products[idx].name = name; d.products[idx].price = price; d.products[idx].img = img; d.products[idx].description = description; }
     } else {
       const maxId = d.products.length ? Math.max(...d.products.map(x => x.id)) : 0;
-      d.products.push({ id: maxId + 1, name, price, img });
+      d.products.push({ id: maxId + 1, name, price, img, description });
     }
 
     saveSiteData(d);

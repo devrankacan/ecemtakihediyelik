@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ürün Detayı – Ecem Takı Hediyelik</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --murd: #7B1B3A; --murd-dark: #5c1229; --murd-light: #f5eaee;
+      --cream: #F4EDE6; --cream2: #EDE3DA; --white: #fff;
+      --text: #2c2c2c; --text-light: #666; --wa: #25D366; --wa-dark: #1ebe5d;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', sans-serif; color: var(--text); background: var(--white); overflow-x: hidden; }
+
+    /* ANNOUNCE */
+    .announce-bar { background: var(--murd-light); padding: 8px 16px; font-size: 13px; font-weight: 500; color: var(--murd); display: flex; align-items: center; justify-content: space-between; }
+    .announce-bar .social-top a { color: var(--murd); margin-left: 12px; font-size: 15px; transition: opacity .2s; }
+    .announce-bar .social-top a:hover { opacity: .7; }
+
+    /* HEADER */
+    header { background: var(--white); border-bottom: 1px solid #e8ddd5; position: sticky; top: 0; z-index: 1000; }
+    .header-inner { max-width: 1280px; margin: auto; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .logo-icon { width: 46px; height: 46px; background: var(--murd); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; }
+    .logo-text strong { display: block; font-family: 'Playfair Display', serif; font-size: 18px; color: var(--murd); }
+    .logo-text span { font-size: 11px; color: var(--text-light); }
+    nav { display: flex; align-items: center; gap: 32px; }
+    nav a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--text); transition: color .2s; }
+    nav a:hover, nav a.active { color: var(--murd); }
+    .btn-hesap { background: var(--murd); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; text-decoration: none; transition: background .2s; }
+    .btn-hesap:hover { background: var(--murd-dark); }
+    .hamburger { display: none; background: none; border: none; cursor: pointer; font-size: 22px; color: var(--murd); }
+    .mobile-nav { display: none; flex-direction: column; background: white; border-top: 1px solid #eee; padding: 16px 24px; gap: 16px; }
+    .mobile-nav.open { display: flex; }
+    .mobile-nav a { text-decoration: none; font-size: 15px; color: var(--text); font-weight: 500; }
+
+    /* BREADCRUMB */
+    .breadcrumb { background: var(--cream); padding: 12px 24px; font-size: 13px; color: var(--text-light); }
+    .breadcrumb a { color: var(--murd); text-decoration: none; }
+    .breadcrumb a:hover { text-decoration: underline; }
+    .breadcrumb span { margin: 0 8px; }
+
+    /* PRODUCT DETAIL */
+    .detail-section { padding: 48px 24px; max-width: 1100px; margin: auto; }
+    .detail-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    /* IMAGE AREA */
+    .detail-img-wrap {
+      position: sticky;
+      top: 90px;
+    }
+    .detail-main-img {
+      width: 100%;
+      aspect-ratio: 1;
+      object-fit: cover;
+      border-radius: 16px;
+      display: block;
+      background: var(--cream2);
+    }
+    .detail-main-img.placeholder {
+      display: flex; align-items: center; justify-content: center;
+      font-size: 64px; color: var(--murd); opacity: .3;
+      aspect-ratio: 1;
+    }
+
+    /* INFO AREA */
+    .detail-info {}
+    .detail-badge {
+      display: inline-block;
+      background: var(--murd-light);
+      color: var(--murd);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 5px 12px;
+      border-radius: 20px;
+      margin-bottom: 16px;
+    }
+    .detail-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+    .detail-price {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--murd);
+      margin-bottom: 24px;
+    }
+    .detail-divider { width: 100%; height: 1px; background: #e8ddd5; margin-bottom: 24px; }
+    .detail-desc-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 10px; }
+    .detail-desc { font-size: 15px; color: var(--text-light); line-height: 1.85; margin-bottom: 32px; }
+
+    .detail-actions { display: flex; flex-direction: column; gap: 12px; }
+    .btn-wa-big {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      background: var(--wa);
+      color: white;
+      padding: 16px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      transition: background .2s, transform .2s;
+      min-height: 56px;
+    }
+    .btn-wa-big:hover { background: var(--wa-dark); transform: translateY(-2px); }
+    .btn-wa-big i { font-size: 22px; }
+
+    .btn-back {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: transparent;
+      color: var(--murd);
+      border: 2px solid var(--murd);
+      padding: 14px 28px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 600;
+      transition: all .2s;
+      min-height: 52px;
+    }
+    .btn-back:hover { background: var(--murd); color: white; }
+
+    .detail-meta { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .meta-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light); }
+    .meta-item i { color: var(--murd); width: 16px; text-align: center; }
+
+    /* RELATED */
+    .related-section { padding: 48px 24px; background: var(--cream); }
+    .related-section h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--murd); margin-bottom: 8px; text-align: center; }
+    .related-divider { width: 48px; height: 3px; background: var(--murd); margin: 0 auto 32px; border-radius: 2px; }
+    .related-grid {
+      max-width: 1100px;
+      margin: auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+    .related-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      text-decoration: none;
+      box-shadow: 0 2px 8px rgba(0,0,0,.06);
+      transition: transform .2s, box-shadow .2s;
+      display: flex;
+      flex-direction: column;
+    }
+    .related-card:hover { transform: translateY(-4px); box-shadow: 0 6px 20px rgba(0,0,0,.1); }
+    .related-card img { width: 100%; aspect-ratio: 1; object-fit: cover; background: var(--cream2); }
+    .related-card-info { padding: 12px; background: var(--murd); flex: 1; }
+    .related-card-info h3 { color: white; font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .related-card-info .price { color: white; font-size: 13px; font-weight: 700; }
+
+    /* NOT FOUND */
+    .not-found { text-align: center; padding: 80px 24px; }
+    .not-found i { font-size: 56px; color: var(--murd); opacity: .3; margin-bottom: 20px; }
+    .not-found h2 { font-size: 22px; color: var(--text); margin-bottom: 10px; }
+    .not-found p { color: var(--text-light); margin-bottom: 24px; }
+
+    /* FOOTER */
+    footer { background: var(--cream); border-top: 1px solid #ddd5cc; padding: 60px 24px 0; }
+    .footer-inner { max-width: 1100px; margin: auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; padding-bottom: 40px; }
+    .footer-brand .logo { margin-bottom: 16px; display: inline-flex; }
+    .footer-brand p { font-size: 13px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; }
+    .footer-social { display: flex; gap: 12px; }
+    .footer-social a { width: 36px; height: 36px; background: var(--murd); color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; text-decoration: none; transition: background .2s; }
+    .footer-social a:hover { background: var(--murd-dark); }
+    .footer-col h4 { font-size: 15px; font-weight: 600; color: var(--murd); margin-bottom: 16px; }
+    .footer-col ul { list-style: none; }
+    .footer-col ul li { margin-bottom: 10px; }
+    .footer-col ul li a { text-decoration: none; font-size: 13px; color: var(--text-light); transition: color .2s; }
+    .footer-col ul li a:hover { color: var(--murd); }
+    .footer-contact-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: 13px; color: var(--text-light); }
+    .footer-contact-item i { color: var(--murd); margin-top: 2px; flex-shrink: 0; }
+    .footer-bottom { border-top: 1px solid #ddd5cc; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--text-light); }
+    .footer-bottom a { color: var(--murd); text-decoration: none; font-weight: 600; }
+
+    /* WA FLOAT */
+    .wa-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 56px; height: 56px; background: var(--wa); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 16px rgba(37,211,102,.4); transition: transform .2s; }
+    .wa-float:hover { transform: scale(1.1); }
+
+    /* RESPONSIVE */
+    @media (max-width: 900px) {
+      nav, .btn-hesap { display: none; }
+      .hamburger { display: block; }
+      .detail-inner { grid-template-columns: 1fr; gap: 28px; }
+      .detail-img-wrap { position: static; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      .footer-bottom { flex-direction: column; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .detail-section { padding: 28px 16px; }
+      .related-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .wa-float { width: 50px; height: 50px; font-size: 22px; bottom: 16px; right: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ANNOUNCE -->
+<div class="announce-bar">
+  <span></span>
+  <span id="announceText">Sadece bu ay ilk alışverişinizde %35'e varan indirim.</span>
+  <div class="social-top">
+    <a href="#" data-social="fb" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+    <a href="#" data-social="ig" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+    <a href="#" data-social="tt" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="logo">
+      <div class="logo-icon"><i class="fas fa-gem"></i></div>
+      <div class="logo-text">
+        <strong>Ecem Takı</strong>
+        <span>Bayburt'ta İlk ve Tek</span>
+      </div>
+    </a>
+    <nav>
+      <a href="index.html">Anasayfa</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="urunler.html" class="active">Ürünler</a>
+      <a href="iletisim.html">İletişim</a>
+    </nav>
+    <a href="#" class="btn-hesap" data-wa="main" target="_blank">
+      <i class="fab fa-whatsapp"></i> Sipariş Ver
+    </a>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="Menü"><i class="fas fa-bars"></i></button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Anasayfa</a>
+    <a href="hakkimizda.html">Hakkımızda</a>
+    <a href="urunler.html">Ürünler</a>
+    <a href="iletisim.html">İletişim</a>
+    <a href="#" data-wa="main" target="_blank"><i class="fab fa-whatsapp"></i> Sipariş Ver</a>
+  </div>
+</header>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb">
+  <a href="index.html">Anasayfa</a>
+  <span>/</span>
+  <a href="urunler.html">Ürünler</a>
+  <span>/</span>
+  <span id="breadcrumbName">Ürün</span>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" class="logo">
+        <div class="logo-icon"><i class="fas fa-gem"></i></div>
+        <div class="logo-text">
+          <strong>Ecem Takı</strong>
+          <span>Bayburt'ta İlk ve Tek</span>
+        </div>
+      </a>
+      <p>Bayburt'un en güzel hediyelik ve takı koleksiyonunu sizinle buluşturuyoruz.</p>
+      <div class="footer-social">
+        <a href="#" data-social="fb" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" data-social="ig" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" data-social="tt" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+        <a href="#" data-wa="main" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Sayfalar</h4>
+      <ul>
+        <li><a href="index.html">Anasayfa</a></li>
+        <li><a href="hakkimizda.html">Hakkımızda</a></li>
+        <li><a href="urunler.html">Ürünler</a></li>
+        <li><a href="iletisim.html">İletişim</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>İletişim</h4>
+      <div class="footer-contact-item"><i class="fas fa-location-dot"></i><span data-f="address">Tuzcuzade Mah. Cumhuriyet Cad. Bayburt Dedekorkut Şehir Müzesi Dükkan 1</span></div>
+      <div class="footer-contact-item"><i class="fas fa-envelope"></i><span data-f="email">destek@ecemtakihediyelik.com</span></div>
+      <div class="footer-contact-item"><i class="fab fa-whatsapp"></i><span data-f="phone">0458 2113434</span></div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div style="display:flex;gap:24px;flex-wrap:wrap;">
+      <a href="#">Mesafeli Satış Sözleşmesi</a>
+      <a href="#">İptal ve İade Koşulları</a>
+    </div>
+    <span>Copyright &copy; 2025, Tüm Hakları Saklıdır.</span>
+    <span>Created By <a href="#">Devran Kaçan</a></span>
+  </div>
+</footer>
+
+<a href="#" class="wa-float" data-wa="main" target="_blank" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+<script src="site-data.js"></script>
+<script>
+  function toggleMenu() { document.getElementById('mobileNav').classList.toggle('open'); }
+
+  const params = new URLSearchParams(window.location.search);
+  const productId = parseInt(params.get('id'));
+  const d = getSiteData();
+  applyCommon(d);
+
+  const product = d.products.find(p => p.id === productId);
+  const main = document.getElementById('mainContent');
+
+  if (!product) {
+    main.innerHTML = `
+      <div class="not-found">
+        <i class="fas fa-box-open"></i>
+        <h2>Ürün bulunamadı</h2>
+        <p>Aradığınız ürün mevcut değil veya kaldırılmış olabilir.</p>
+        <a href="urunler.html" style="display:inline-flex;align-items:center;gap:8px;background:var(--murd);color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:600;">
+          <i class="fas fa-arrow-left"></i> Ürünlere Dön
+        </a>
+      </div>`;
+  } else {
+    // Update page title & breadcrumb
+    document.title = product.name + ' – Ecem Takı Hediyelik';
+    document.getElementById('breadcrumbName').textContent = product.name;
+
+    // Related products (exclude current, max 4)
+    const related = d.products.filter(p => p.id !== product.id).slice(0, 4);
+    const relatedHTML = related.length ? `
+      <section class="related-section">
+        <h2>Diğer Ürünler</h2>
+        <div class="related-divider"></div>
+        <div class="related-grid">
+          ${related.map(p => `
+            <a href="urun-detay.html?id=${p.id}" class="related-card">
+              <img src="${p.img}" alt="${p.name}" onerror="this.style.background='#F4EDE6';this.removeAttribute('src')" />
+              <div class="related-card-info">
+                <h3>${p.name}</h3>
+                <div class="price">${p.price}</div>
+              </div>
+            </a>
+          `).join('')}
+        </div>
+      </section>` : '';
+
+    main.innerHTML = `
+      <section class="detail-section">
+        <div class="detail-inner">
+          <div class="detail-img-wrap">
+            <img class="detail-main-img" src="${product.img}" alt="${product.name}"
+              onerror="this.outerHTML='<div class=\'detail-main-img placeholder\'><i class=\'fas fa-gem\'></i></div>'" />
+          </div>
+          <div class="detail-info">
+            <div class="detail-badge">Ecem Takı</div>
+            <h1 class="detail-name">${product.name}</h1>
+            <div class="detail-price">${product.price}</div>
+            <div class="detail-divider"></div>
+            ${product.description ? `
+              <div class="detail-desc-title">Ürün Açıklaması</div>
+              <p class="detail-desc">${product.description}</p>
+            ` : ''}
+            <div class="detail-actions">
+              <a href="${waLink(d, product.name)}" class="btn-wa-big" target="_blank">
+                <i class="fab fa-whatsapp"></i> WhatsApp ile Sipariş Ver
+              </a>
+              <a href="urunler.html" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Tüm Ürünlere Dön
+              </a>
+            </div>
+            <div class="detail-meta">
+              <div class="meta-item"><i class="fas fa-location-dot"></i><span data-f="address"></span></div>
+              <div class="meta-item"><i class="fas fa-phone"></i><span data-f="phone"></span></div>
+              <div class="meta-item"><i class="fas fa-shield-halved"></i> Güvenli alışveriş garantisi</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      ${relatedHTML}`;
+
+    // Re-apply data-f attributes that were just rendered
+    document.querySelectorAll('[data-f="address"]').forEach(el => el.textContent = d.address);
+    document.querySelectorAll('[data-f="phone"]').forEach(el => el.textContent = d.phone);
+  }
+</script>
+</body>
+</html>

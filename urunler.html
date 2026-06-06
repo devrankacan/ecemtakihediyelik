@@ -540,9 +540,11 @@
       group.forEach(p => {
         html += `
           <div class="product-card">
-            <img class="prod-img" src="${p.img}" alt="${p.name}" onerror="this.style.background='#F4EDE6';this.removeAttribute('src')" />
+            <a href="urun-detay.html?id=${p.id}" style="display:block;text-decoration:none;">
+              <img class="prod-img" src="${p.img}" alt="${p.name}" onerror="this.style.background='#F4EDE6';this.removeAttribute('src')" />
+            </a>
             <div class="prod-info">
-              <h3>${p.name}</h3>
+              <a href="urun-detay.html?id=${p.id}" style="text-decoration:none;"><h3>${p.name}</h3></a>
               <div class="price">${p.price}</div>
               <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
                 <i class="fab fa-whatsapp"></i> Sipariş Vermek İçin
