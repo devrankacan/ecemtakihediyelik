@@ -194,7 +194,7 @@
 
     /* FOOTER */
     footer { background: var(--cream); border-top: 1px solid #ddd5cc; padding: 60px 24px 0; }
-    .footer-inner { max-width: 1100px; margin: auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 48px; padding-bottom: 40px; }
+    .footer-inner { max-width: 1100px; margin: auto; display: grid; grid-template-columns: 1.4fr 1fr 1.8fr; gap: 48px; padding-bottom: 40px; }
     .footer-brand .logo { margin-bottom: 16px; display: inline-flex; }
     .footer-brand p { font-size: 13px; color: var(--text-light); line-height: 1.7; margin-bottom: 20px; }
     .footer-social { display: flex; gap: 12px; }
@@ -207,9 +207,11 @@
     .footer-col ul li a:hover { color: var(--murd); }
     .footer-contact-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: 13px; color: var(--text-light); }
     .footer-contact-item i { color: var(--murd); margin-top: 2px; flex-shrink: 0; }
+    .footer-contact-item span[data-f="address"] { white-space: nowrap; }
     .footer-bottom { border-top: 1px solid #ddd5cc; padding: 16px 24px; font-size: 12px; color: var(--text-light); }
     .footer-bottom-inner { max-width: 1100px; margin: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
     .footer-bottom a { color: var(--murd); text-decoration: none; font-weight: 600; }
+    .footer-legal-links { display: flex; gap: 24px; flex-wrap: wrap; }
 
     /* WA FLOAT */
     .wa-float { position: fixed; bottom: 28px; right: 28px; z-index: 999; width: 56px; height: 56px; background: var(--wa); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; text-decoration: none; box-shadow: 0 4px 16px rgba(37,211,102,.4); transition: transform .2s; }
@@ -224,7 +226,9 @@
       .detail-img-wrap { position: static; }
       .related-grid { grid-template-columns: repeat(2, 1fr); }
       .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+      .footer-contact-item span[data-f="address"] { white-space: normal; }
       .footer-bottom-inner { flex-direction: column; text-align: center; }
+      .footer-legal-links { gap: 12px; font-size: 11px; flex-wrap: nowrap; justify-content: center; }
     }
     @media (max-width: 480px) {
       .detail-section { padding: 28px 16px; }
@@ -317,7 +321,7 @@
   </div>
   <div class="footer-bottom">
     <div class="footer-bottom-inner">
-      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+      <div class="footer-legal-links">
         <a href="#">Mesafeli Satış Sözleşmesi</a>
         <a href="#">İptal ve İade Koşulları</a>
       </div>
