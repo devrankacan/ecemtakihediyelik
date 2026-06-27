@@ -247,8 +247,8 @@
       text-decoration: none;
     }
     .cat-circle {
-      width: 80px;
-      height: 80px;
+      width: 100px;
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -257,7 +257,7 @@
       transition: transform .2s;
     }
     .cat-item:hover .cat-circle { transform: scale(1.1); }
-    .cat-circle img { width: 64px; height: 64px; object-fit: contain; }
+    .cat-circle img { width: 96px; height: 96px; object-fit: contain; }
     .cat-item span { font-size: 13px; font-weight: 500; color: var(--text); text-align: center; }
 
     /* ── PRODUCTS GRID (Ana Sayfa) ── */
@@ -682,8 +682,8 @@
 
     @media (max-width: 375px) {
       .cat-grid { gap: 16px; }
-      .cat-circle { width: 56px; height: 56px; font-size: 20px; }
-      .cat-circle img { width: 46px; height: 46px; }
+      .cat-circle { width: 72px; height: 72px; font-size: 20px; }
+      .cat-circle img { width: 68px; height: 68px; }
       .hero-title { font-size: clamp(22px, 8vw, 30px); }
       .announce-bar .announce-text { font-size: 11px; }
       .wa-float { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 22px; }
@@ -757,23 +757,18 @@
   <div class="cat-grid">
     <a href="urunler.html" class="cat-item">
       <div class="cat-circle"><img src="icons/hediyelik.png" alt="Hediyelikler" /></div>
-      <span>Hediyelikler</span>
     </a>
     <a href="urunler.html" class="cat-item">
       <div class="cat-circle"><img src="icons/saatler.png" alt="Saatler" /></div>
-      <span>Saatler</span>
     </a>
     <a href="urunler.html" class="cat-item">
       <div class="cat-circle"><img src="icons/tespih.png" alt="Tespihler" /></div>
-      <span>Tespihler</span>
     </a>
     <a href="urunler.html" class="cat-item">
       <div class="cat-circle"><img src="icons/kolye.png" alt="Kolyeler" /></div>
-      <span>Kolyeler</span>
     </a>
     <a href="urunler.html" class="cat-item">
       <div class="cat-circle"><img src="icons/bileklik.png" alt="Bileklikler" /></div>
-      <span>Bileklikler</span>
     </a>
   </div>
 </section>
