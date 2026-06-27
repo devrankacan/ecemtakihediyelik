@@ -49,6 +49,11 @@
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 20px;
       font-size: 28px; color: white;
+      overflow: hidden;
+    }
+    .login-box .login-logo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
     }
     .login-box h1 { font-size: 22px; margin-bottom: 6px; color: var(--murd); }
     .login-box p { font-size: 13px; color: var(--text-light); margin-bottom: 28px; }
@@ -372,7 +377,7 @@
 <!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
-    <div class="login-logo"><i class="fas fa-gem"></i></div>
+    <div class="login-logo" id="loginLogo"><i class="fas fa-gem"></i></div>
     <h1>Admin Paneli</h1>
     <p>Ecem Takı Hediyelik</p>
     <input type="text" id="loginUser" placeholder="Kullanıcı adı" autocomplete="username" />
@@ -728,6 +733,13 @@
       document.getElementById('loginError').style.display = 'block';
     }
   }
+
+  (function initLoginLogo() {
+    const d = getSiteData();
+    if (d.logo_img) {
+      document.getElementById('loginLogo').innerHTML = `<img src="${d.logo_img}" alt="${d.logo_text || 'Logo'}" />`;
+    }
+  })();
 
   function doLogout() {
     document.getElementById('adminApp').style.display = 'none';
