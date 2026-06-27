@@ -41,6 +41,7 @@
 
     /* BREADCRUMB */
     .breadcrumb { background: var(--cream); padding: 12px 24px; font-size: 13px; color: var(--text-light); }
+    .breadcrumb-inner { max-width: 1100px; margin: auto; }
     .breadcrumb a { color: var(--murd); text-decoration: none; }
     .breadcrumb a:hover { text-decoration: underline; }
     .breadcrumb span { margin: 0 8px; }
@@ -206,7 +207,8 @@
     .footer-col ul li a:hover { color: var(--murd); }
     .footer-contact-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; font-size: 13px; color: var(--text-light); }
     .footer-contact-item i { color: var(--murd); margin-top: 2px; flex-shrink: 0; }
-    .footer-bottom { border-top: 1px solid #ddd5cc; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--text-light); }
+    .footer-bottom { border-top: 1px solid #ddd5cc; padding: 16px 24px; font-size: 12px; color: var(--text-light); }
+    .footer-bottom-inner { max-width: 1100px; margin: auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
     .footer-bottom a { color: var(--murd); text-decoration: none; font-weight: 600; }
 
     /* WA FLOAT */
@@ -222,7 +224,7 @@
       .detail-img-wrap { position: static; }
       .related-grid { grid-template-columns: repeat(2, 1fr); }
       .footer-inner { grid-template-columns: 1fr; gap: 32px; }
-      .footer-bottom { flex-direction: column; text-align: center; }
+      .footer-bottom-inner { flex-direction: column; text-align: center; }
     }
     @media (max-width: 480px) {
       .detail-section { padding: 28px 16px; }
@@ -266,11 +268,13 @@
 
 <!-- BREADCRUMB -->
 <div class="breadcrumb">
-  <a href="index.html">Anasayfa</a>
-  <span>/</span>
-  <a href="urunler.html">Ürünler</a>
-  <span>/</span>
-  <span id="breadcrumbName">Ürün</span>
+  <div class="breadcrumb-inner">
+    <a href="index.html">Anasayfa</a>
+    <span>/</span>
+    <a href="urunler.html">Ürünler</a>
+    <span>/</span>
+    <span id="breadcrumbName">Ürün</span>
+  </div>
 </div>
 
 <!-- MAIN CONTENT -->
@@ -312,12 +316,14 @@
     </div>
   </div>
   <div class="footer-bottom">
-    <div style="display:flex;gap:24px;flex-wrap:wrap;">
-      <a href="#">Mesafeli Satış Sözleşmesi</a>
-      <a href="#">İptal ve İade Koşulları</a>
+    <div class="footer-bottom-inner">
+      <div style="display:flex;gap:24px;flex-wrap:wrap;">
+        <a href="#">Mesafeli Satış Sözleşmesi</a>
+        <a href="#">İptal ve İade Koşulları</a>
+      </div>
+      <span>Copyright &copy; 2025, Tüm Hakları Saklıdır.</span>
+      <span>Created By <a href="#">Devran Kaçan</a></span>
     </div>
-    <span>Copyright &copy; 2025, Tüm Hakları Saklıdır.</span>
-    <span>Created By <a href="#">Devran Kaçan</a></span>
   </div>
 </footer>
 
