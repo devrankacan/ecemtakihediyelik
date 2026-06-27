@@ -146,6 +146,18 @@
     .meta-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-light); }
     .meta-item i { color: var(--murd); width: 16px; text-align: center; }
 
+    .trust-badges {
+      display: flex;
+      gap: 20px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid #ecddd5;
+      flex-wrap: wrap;
+    }
+    .trust-badge { display: flex; align-items: center; gap: 10px; }
+    .trust-badge img { width: 32px; height: 32px; object-fit: contain; flex-shrink: 0; }
+    .trust-badge span { font-size: 12px; font-weight: 600; color: var(--text); max-width: 90px; line-height: 1.3; }
+
     /* RELATED */
     .related-section { padding: 48px 24px; background: var(--cream); }
     .related-section h2 { font-family: 'Playfair Display', serif; font-size: 24px; color: var(--murd); margin-bottom: 8px; text-align: center; }
@@ -391,6 +403,12 @@
                 <i class="fas fa-arrow-left"></i> Tüm Ürünlere Dön
               </a>
             </div>
+            <div class="trust-badges">
+              <div class="trust-badge"><img src="icons/kargo.png" alt="Kargo" /><span>Hızlı Kargo</span></div>
+              <div class="trust-badge"><img src="icons/yerli-uretim.png" alt="Yerli Üretim" /><span>Yerli Üretim</span></div>
+              <div class="trust-badge"><img src="icons/yuksek-puan.png" alt="Yüksek Puan" /><span>Yüksek Müşteri Puanı</span></div>
+            </div>
+
             <div class="detail-meta">
               <div class="meta-item"><i class="fas fa-location-dot"></i><span data-f="address"></span></div>
               <div class="meta-item"><i class="fas fa-phone"></i><span data-f="phone"></span></div>
