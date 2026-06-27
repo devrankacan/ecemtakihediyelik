@@ -249,17 +249,15 @@
     .cat-circle {
       width: 80px;
       height: 80px;
-      background: var(--murd);
-      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 28px;
-      color: white;
-      transition: transform .2s, background .2s;
+      color: var(--murd);
+      transition: transform .2s;
     }
-    .cat-item:hover .cat-circle { transform: scale(1.1); background: var(--murd-dark); }
-    .cat-circle img { width: 42px; height: 42px; object-fit: contain; }
+    .cat-item:hover .cat-circle { transform: scale(1.1); }
+    .cat-circle img { width: 64px; height: 64px; object-fit: contain; }
     .cat-item span { font-size: 13px; font-weight: 500; color: var(--text); text-align: center; }
 
     /* ── PRODUCTS GRID (Ana Sayfa) ── */
@@ -685,6 +683,7 @@
     @media (max-width: 375px) {
       .cat-grid { gap: 16px; }
       .cat-circle { width: 56px; height: 56px; font-size: 20px; }
+      .cat-circle img { width: 46px; height: 46px; }
       .hero-title { font-size: clamp(22px, 8vw, 30px); }
       .announce-bar .announce-text { font-size: 11px; }
       .wa-float { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 22px; }
