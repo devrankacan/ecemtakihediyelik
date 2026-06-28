@@ -62,12 +62,16 @@ async function getSiteData() {
 async function saveSiteData(data) {
   localStorage.setItem(SITE_KEY, JSON.stringify(data));
   try {
-    await fetch('/api/site-data', {
+    const res = await fetch('/api/site-data', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data)
     });
-  } catch (e) {}
+    if (!res.ok) throw new Error('Sunucu kaydı başarısız: ' + res.status);
+  } catch (e) {
+    console.error(e);
+    throw e;
+  }
 }
 
 // Helper: WhatsApp link

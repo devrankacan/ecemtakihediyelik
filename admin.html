@@ -863,9 +863,13 @@
     d.social_fb = getVal('social_fb');
     d.social_ig = getVal('social_ig');
     d.social_tt = getVal('social_tt');
-    await saveSiteData(d);
-    showToast('Site ayarları kaydedildi!');
-    showFeedback('genelFeedback');
+    try {
+      await saveSiteData(d);
+      showToast('Site ayarları kaydedildi!');
+      showFeedback('genelFeedback');
+    } catch (e) {
+      showToast('Kaydedilemedi! Görsel çok büyük olabilir, sunucu ayarını kontrol edin.', true);
+    }
   }
 
   // ── SAVE ABOUT ──
@@ -874,9 +878,13 @@
     d.about_text1 = getVal('about_text1');
     d.about_text2 = getVal('about_text2');
     d.about_img = getVal('about_img');
-    await saveSiteData(d);
-    showToast('Hakkımızda sayfası kaydedildi!');
-    showFeedback('aboutFeedback');
+    try {
+      await saveSiteData(d);
+      showToast('Hakkımızda sayfası kaydedildi!');
+      showFeedback('aboutFeedback');
+    } catch (e) {
+      showToast('Kaydedilemedi! Görsel çok büyük olabilir, sunucu ayarını kontrol edin.', true);
+    }
   }
 
   // ── SAVE HERO ──
@@ -886,9 +894,13 @@
     d.hero_title = getVal('hero_title');
     d.hero_subtitle = getVal('hero_subtitle');
     d.hero_img = getVal('hero_img');
-    await saveSiteData(d);
-    showToast('Ana sayfa kaydedildi!');
-    showFeedback('heroFeedback');
+    try {
+      await saveSiteData(d);
+      showToast('Ana sayfa kaydedildi!');
+      showFeedback('heroFeedback');
+    } catch (e) {
+      showToast('Kaydedilemedi! Görsel çok büyük olabilir, sunucu ayarını kontrol edin.', true);
+    }
   }
 
   // ── PRODUCTS ──
@@ -989,10 +1001,14 @@
       d.products.push({ id: maxId + 1, name, category, price, img, description });
     }
 
-    await saveSiteData(d);
-    renderProducts(d.products);
-    closeProductModal();
-    showToast(editId ? 'Ürün güncellendi!' : 'Ürün eklendi!');
+    try {
+      await saveSiteData(d);
+      renderProducts(d.products);
+      closeProductModal();
+      showToast(editId ? 'Ürün güncellendi!' : 'Ürün eklendi!');
+    } catch (e) {
+      showToast('Kaydedilemedi! Görsel çok büyük olabilir, sunucu ayarını kontrol edin.', true);
+    }
   }
 
   async function deleteProduct(id) {
