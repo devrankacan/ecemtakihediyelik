@@ -716,7 +716,8 @@
 
 <script src="site-data.js"></script>
 <script>
-  let currentUsername = '';
+  const SESSION_KEY = 'ecem_admin_session';
+  let currentUsername = localStorage.getItem(SESSION_KEY) || '';
 
   async function doLogin() {
     const u = document.getElementById('loginUser').value.trim();
@@ -730,6 +731,7 @@
       const result = await res.json();
       if (result.ok) {
         currentUsername = u;
+        localStorage.setItem(SESSION_KEY, u);
         document.getElementById('loginScreen').style.display = 'none';
         document.getElementById('adminApp').style.display = 'block';
         loadAll();
@@ -748,9 +750,16 @@
       el.classList.add('has-img');
       el.innerHTML = `<img src="${d.logo_img}" alt="${d.logo_text || 'Logo'}" />`;
     }
+    if (currentUsername) {
+      document.getElementById('loginScreen').style.display = 'none';
+      document.getElementById('adminApp').style.display = 'block';
+      loadAll();
+    }
   })();
 
   function doLogout() {
+    currentUsername = '';
+    localStorage.removeItem(SESSION_KEY);
     document.getElementById('adminApp').style.display = 'none';
     document.getElementById('loginScreen').style.display = 'flex';
     document.getElementById('loginUser').value = '';
