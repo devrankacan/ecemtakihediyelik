@@ -337,9 +337,10 @@
 <script>
   function toggleMenu() { document.getElementById('mobileNav').classList.toggle('open'); }
 
+  (async function() {
   const params = new URLSearchParams(window.location.search);
   const productId = parseInt(params.get('id'));
-  const d = getSiteData();
+  const d = await getSiteData();
   applyCommon(d);
 
   const product = d.products.find(p => p.id === productId);
@@ -423,6 +424,7 @@
     document.querySelectorAll('[data-f="address"]').forEach(el => el.textContent = d.address);
     document.querySelectorAll('[data-f="phone"]').forEach(el => el.textContent = d.phone);
   }
+  })();
 </script>
 </body>
 </html>

@@ -41,19 +41,33 @@ const DEFAULT_DATA = {
   ]
 };
 
-function getSiteData() {
+async function getSiteData() {
+  try {
+    const res = await fetch('/api/site-data');
+    if (res.ok) {
+      const parsed = await res.json();
+      const merged = { ...DEFAULT_DATA, ...parsed };
+      localStorage.setItem(SITE_KEY, JSON.stringify(merged));
+      return merged;
+    }
+  } catch (e) {}
+  // Sunucuya erişilemiyorsa son bilinen veriyi kullan
   try {
     const stored = localStorage.getItem(SITE_KEY);
-    if (stored) {
-      const parsed = JSON.parse(stored);
-      return { ...DEFAULT_DATA, ...parsed };
-    }
-  } catch(e) {}
+    if (stored) return { ...DEFAULT_DATA, ...JSON.parse(stored) };
+  } catch (e) {}
   return { ...DEFAULT_DATA };
 }
 
-function saveSiteData(data) {
+async function saveSiteData(data) {
   localStorage.setItem(SITE_KEY, JSON.stringify(data));
+  try {
+    await fetch('/api/site-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch (e) {}
 }
 
 // Helper: WhatsApp link

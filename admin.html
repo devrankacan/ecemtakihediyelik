@@ -716,31 +716,33 @@
 
 <script src="site-data.js"></script>
 <script>
-  const ADMIN_KEY = 'ecem_admin_creds';
+  let currentUsername = '';
 
-  function getAdminCreds() {
-    try {
-      const c = localStorage.getItem(ADMIN_KEY);
-      if (c) return JSON.parse(c);
-    } catch(e) {}
-    return { username: 'ecemyonetim', password: 'Bb-EcmTk!2026#Vr' };
-  }
-
-  function doLogin() {
+  async function doLogin() {
     const u = document.getElementById('loginUser').value.trim();
     const p = document.getElementById('loginPass').value;
-    const creds = getAdminCreds();
-    if (u === creds.username && p === creds.password) {
-      document.getElementById('loginScreen').style.display = 'none';
-      document.getElementById('adminApp').style.display = 'block';
-      loadAll();
-    } else {
+    try {
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: u, password: p })
+      });
+      const result = await res.json();
+      if (result.ok) {
+        currentUsername = u;
+        document.getElementById('loginScreen').style.display = 'none';
+        document.getElementById('adminApp').style.display = 'block';
+        loadAll();
+      } else {
+        document.getElementById('loginError').style.display = 'block';
+      }
+    } catch (e) {
       document.getElementById('loginError').style.display = 'block';
     }
   }
 
-  (function initLoginLogo() {
-    const d = getSiteData();
+  (async function initLoginLogo() {
+    const d = await getSiteData();
     if (d.logo_img) {
       const el = document.getElementById('loginLogo');
       el.classList.add('has-img');
@@ -799,8 +801,8 @@
   }
 
   // ── LOAD ALL ──
-  function loadAll() {
-    const d = getSiteData();
+  async function loadAll() {
+    const d = await getSiteData();
 
     // Stats
     document.getElementById('statProducts').textContent = d.products.length;
@@ -848,8 +850,8 @@
   }
 
   // ── SAVE GENEL ──
-  function saveGenel() {
-    const d = getSiteData();
+  async function saveGenel() {
+    const d = await getSiteData();
     d.announce = getVal('announce');
     d.logo_text = getVal('logo_text');
     d.logo_sub = getVal('logo_sub');
@@ -861,30 +863,30 @@
     d.social_fb = getVal('social_fb');
     d.social_ig = getVal('social_ig');
     d.social_tt = getVal('social_tt');
-    saveSiteData(d);
+    await saveSiteData(d);
     showToast('Site ayarları kaydedildi!');
     showFeedback('genelFeedback');
   }
 
   // ── SAVE ABOUT ──
-  function saveAbout() {
-    const d = getSiteData();
+  async function saveAbout() {
+    const d = await getSiteData();
     d.about_text1 = getVal('about_text1');
     d.about_text2 = getVal('about_text2');
     d.about_img = getVal('about_img');
-    saveSiteData(d);
+    await saveSiteData(d);
     showToast('Hakkımızda sayfası kaydedildi!');
     showFeedback('aboutFeedback');
   }
 
   // ── SAVE HERO ──
-  function saveHero() {
-    const d = getSiteData();
+  async function saveHero() {
+    const d = await getSiteData();
     d.hero_tag = getVal('hero_tag');
     d.hero_title = getVal('hero_title');
     d.hero_subtitle = getVal('hero_subtitle');
     d.hero_img = getVal('hero_img');
-    saveSiteData(d);
+    await saveSiteData(d);
     showToast('Ana sayfa kaydedildi!');
     showFeedback('heroFeedback');
   }
@@ -923,8 +925,8 @@
     renderProducts(filtered);
   }
 
-  function fillCategorySelect(selected) {
-    const d = getSiteData();
+  async function fillCategorySelect(selected) {
+    const d = await getSiteData();
     const sel = document.getElementById('prodCategory');
     sel.innerHTML = '<option value="">— Kategori seçin —</option>';
     (d.categories || []).forEach(c => {
@@ -936,7 +938,7 @@
     });
   }
 
-  function openProductModal() {
+  async function openProductModal() {
     document.getElementById('modalTitle').textContent = 'Yeni Ürün Ekle';
     document.getElementById('editProductId').value = '';
     document.getElementById('prodName').value = '';
@@ -944,7 +946,7 @@
     document.getElementById('prodImg').value = '';
     document.getElementById('prodDesc').value = '';
     document.getElementById('prodImgPreview').classList.remove('show');
-    fillCategorySelect('');
+    await fillCategorySelect('');
     document.getElementById('productModal').classList.add('open');
   }
 
@@ -952,8 +954,8 @@
     document.getElementById('productModal').classList.remove('open');
   }
 
-  function editProduct(id) {
-    const d = getSiteData();
+  async function editProduct(id) {
+    const d = await getSiteData();
     const p = d.products.find(x => x.id === id);
     if (!p) return;
     document.getElementById('modalTitle').textContent = 'Ürün Düzenle';
@@ -962,13 +964,13 @@
     document.getElementById('prodPrice').value = p.price;
     document.getElementById('prodImg').value = p.img;
     document.getElementById('prodDesc').value = p.description || '';
-    fillCategorySelect(p.category || '');
+    await fillCategorySelect(p.category || '');
     const prev = document.getElementById('prodImgPreview');
     if (p.img) { prev.src = p.img; prev.classList.add('show'); }
     document.getElementById('productModal').classList.add('open');
   }
 
-  function saveProduct() {
+  async function saveProduct() {
     const name = document.getElementById('prodName').value.trim();
     const category = document.getElementById('prodCategory').value;
     const price = document.getElementById('prodPrice').value.trim();
@@ -976,7 +978,7 @@
     const description = document.getElementById('prodDesc').value.trim();
     if (!name || !category || !price) { showToast('Ürün adı, kategori ve fiyat zorunlu!', true); return; }
 
-    const d = getSiteData();
+    const d = await getSiteData();
     const editId = document.getElementById('editProductId').value;
 
     if (editId) {
@@ -987,33 +989,38 @@
       d.products.push({ id: maxId + 1, name, category, price, img, description });
     }
 
-    saveSiteData(d);
+    await saveSiteData(d);
     renderProducts(d.products);
     closeProductModal();
     showToast(editId ? 'Ürün güncellendi!' : 'Ürün eklendi!');
   }
 
-  function deleteProduct(id) {
+  async function deleteProduct(id) {
     if (!confirm('Bu ürünü silmek istediğinize emin misiniz?')) return;
-    const d = getSiteData();
+    const d = await getSiteData();
     d.products = d.products.filter(x => x.id !== id);
-    saveSiteData(d);
+    await saveSiteData(d);
     renderProducts(d.products);
     showToast('Ürün silindi!');
   }
 
   // ── PASSWORD ──
-  function changePassword() {
+  async function changePassword() {
     const old = document.getElementById('passOld').value;
     const n1 = document.getElementById('passNew').value;
     const n2 = document.getElementById('passNew2').value;
-    const creds = getAdminCreds();
 
-    if (old !== creds.password) { showToast('Mevcut şifre hatalı!', true); return; }
     if (n1.length < 4) { showToast('Yeni şifre en az 4 karakter olmalı!', true); return; }
     if (n1 !== n2) { showToast('Yeni şifreler eşleşmiyor!', true); return; }
 
-    localStorage.setItem(ADMIN_KEY, JSON.stringify({ username: creds.username, password: n1 }));
+    const res = await fetch('/api/change-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: currentUsername, oldPassword: old, newPassword: n1 })
+    });
+    const result = await res.json();
+    if (!result.ok) { showToast(result.error || 'Şifre güncellenemedi!', true); return; }
+
     document.getElementById('passOld').value = '';
     document.getElementById('passNew').value = '';
     document.getElementById('passNew2').value = '';

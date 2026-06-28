@@ -1011,8 +1011,8 @@
 </script>
 <script src="site-data.js"></script>
 <script>
-  (function() {
-    const d = getSiteData();
+  (async function() {
+    const d = await getSiteData();
     applyCommon(d);
 
     // Announce
