@@ -340,6 +340,8 @@
   (async function() {
   const params = new URLSearchParams(window.location.search);
   const productId = parseInt(params.get('id'));
+  const cached = getCachedSiteData();
+  if (cached) applyCommon(cached);
   const d = await getSiteData();
   applyCommon(d);
 

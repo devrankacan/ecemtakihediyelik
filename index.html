@@ -914,70 +914,80 @@
 <script src="site-data.js"></script>
 <script>
   (async function() {
-    const d = await getSiteData();
-    applyCommon(d);
+    function renderContent(d) {
+      applyCommon(d);
 
-    // Announce
-    const ann = document.getElementById('announceText');
-    if (ann) ann.textContent = d.announce;
+      // Announce
+      const ann = document.getElementById('announceText');
+      if (ann) ann.textContent = d.announce;
 
-    // Hero
-    const heroTag = document.getElementById('heroTag');
-    if (heroTag) heroTag.textContent = d.hero_tag;
-    const heroTitle = document.getElementById('heroTitle');
-    if (heroTitle) heroTitle.textContent = d.hero_title;
-    const heroSub = document.getElementById('heroSubtitle');
-    if (heroSub) heroSub.textContent = d.hero_subtitle;
-    const heroImg = document.getElementById('heroImg');
-    if (heroImg && d.hero_img) heroImg.src = d.hero_img;
+      // Hero
+      const heroTag = document.getElementById('heroTag');
+      if (heroTag) heroTag.textContent = d.hero_tag;
+      const heroTitle = document.getElementById('heroTitle');
+      if (heroTitle) heroTitle.textContent = d.hero_title;
+      const heroSub = document.getElementById('heroSubtitle');
+      if (heroSub) heroSub.textContent = d.hero_subtitle;
+      const heroImg = document.getElementById('heroImg');
+      if (heroImg && d.hero_img) heroImg.src = d.hero_img;
 
-    // Featured products grid
-    const featuredGrid = document.getElementById('featuredGrid');
-    if (featuredGrid && d.products.length) {
-      const picks = d.products.slice(0, 8);
-      featuredGrid.innerHTML = picks.map(p => `
-        <div class="product-card">
-          <a href="urun-detay.html?id=${p.id}" class="prod-img-wrap">
-            <img class="prod-img" src="${p.img}" alt="${p.name}" />
-          </a>
-          <div class="prod-info">
-            ${p.category ? `<div class="prod-category">${p.category}</div>` : ''}
-            <h3>${p.name}</h3>
-            <div class="price">${p.price}</div>
-          </div>
-          <div class="prod-actions">
-            <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
-              <i class="fab fa-whatsapp"></i> Sipariş Ver
+      // Featured products grid
+      const featuredGrid = document.getElementById('featuredGrid');
+      if (featuredGrid && d.products.length) {
+        const picks = d.products.slice(0, 8);
+        featuredGrid.innerHTML = picks.map(p => `
+          <div class="product-card">
+            <a href="urun-detay.html?id=${p.id}" class="prod-img-wrap">
+              <img class="prod-img" src="${p.img}" alt="${p.name}" />
             </a>
-            <a href="urun-detay.html?id=${p.id}" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
+            <div class="prod-info">
+              ${p.category ? `<div class="prod-category">${p.category}</div>` : ''}
+              <h3>${p.name}</h3>
+              <div class="price">${p.price}</div>
+            </div>
+            <div class="prod-actions">
+              <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
+                <i class="fab fa-whatsapp"></i> Sipariş Ver
+              </a>
+              <a href="urun-detay.html?id=${p.id}" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `).join('');
+      }
+
+      // Slider products from data
+      const track = document.getElementById('sliderTrack');
+      if (track && d.products.length) {
+        const shown = d.products.slice(0, 9);
+        track.innerHTML = shown.map(p => `
+          <div class="product-card">
+            <a href="urun-detay.html?id=${p.id}" class="prod-img-wrap">
+              <img class="prod-img" src="${p.img}" alt="${p.name}" />
+            </a>
+            <div class="prod-info">
+              ${p.category ? `<div class="prod-category">${p.category}</div>` : ''}
+              <h3>${p.name}</h3>
+              <div class="price">${p.price}</div>
+            </div>
+            <div class="prod-actions">
+              <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
+                <i class="fab fa-whatsapp"></i> Sipariş Ver
+              </a>
+              <a href="urun-detay.html?id=${p.id}" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
+            </div>
+          </div>
+        `).join('');
+      }
     }
 
-    // Slider products from data
+    const cached = getCachedSiteData();
+    if (cached) renderContent(cached);
+    const d = await getSiteData();
+    renderContent(d);
+
+    // Init slider (only once, on final data)
     const track = document.getElementById('sliderTrack');
     if (track && d.products.length) {
-      const shown = d.products.slice(0, 9);
-      track.innerHTML = shown.map(p => `
-        <div class="product-card">
-          <a href="urun-detay.html?id=${p.id}" class="prod-img-wrap">
-            <img class="prod-img" src="${p.img}" alt="${p.name}" />
-          </a>
-          <div class="prod-info">
-            ${p.category ? `<div class="prod-category">${p.category}</div>` : ''}
-            <h3>${p.name}</h3>
-            <div class="price">${p.price}</div>
-          </div>
-          <div class="prod-actions">
-            <a href="${waLink(d, p.name)}" class="btn-wa" target="_blank">
-              <i class="fab fa-whatsapp"></i> Sipariş Ver
-            </a>
-            <a href="urun-detay.html?id=${p.id}" class="btn-detail" title="Detay"><i class="fas fa-eye"></i></a>
-          </div>
-        </div>
-      `).join('');
-      // Init slider
       const cards2 = track.querySelectorAll('.product-card');
       let cur2 = 0;
       const dots2 = document.getElementById('sliderDots');

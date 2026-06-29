@@ -744,12 +744,17 @@
   }
 
   (async function initLoginLogo() {
-    const d = await getSiteData();
-    if (d.logo_img) {
-      const el = document.getElementById('loginLogo');
-      el.classList.add('has-img');
-      el.innerHTML = `<img src="${d.logo_img}" alt="${d.logo_text || 'Logo'}" />`;
+    function applyLogo(d) {
+      if (d.logo_img) {
+        const el = document.getElementById('loginLogo');
+        el.classList.add('has-img');
+        el.innerHTML = `<img src="${d.logo_img}" alt="${d.logo_text || 'Logo'}" />`;
+      }
     }
+    const cached = getCachedSiteData();
+    if (cached) applyLogo(cached);
+    const d = await getSiteData();
+    applyLogo(d);
     if (currentUsername) {
       document.getElementById('loginScreen').style.display = 'none';
       document.getElementById('adminApp').style.display = 'block';

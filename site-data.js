@@ -41,6 +41,14 @@ const DEFAULT_DATA = {
   ]
 };
 
+function getCachedSiteData() {
+  try {
+    const stored = localStorage.getItem(SITE_KEY);
+    if (stored) return { ...DEFAULT_DATA, ...JSON.parse(stored) };
+  } catch (e) {}
+  return null;
+}
+
 async function getSiteData() {
   try {
     const res = await fetch('/api/site-data');

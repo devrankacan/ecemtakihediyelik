@@ -354,13 +354,11 @@
 <script src="site-data.js"></script>
 <script>
   (async function() {
-    const d = await getSiteData();
-    applyCommon(d);
-
-    const container = document.getElementById('productsInner');
-    if (!container || !d.products.length) return;
-
-    container.innerHTML = d.products.map(p => `
+    function renderContent(d) {
+      applyCommon(d);
+      const container = document.getElementById('productsInner');
+      if (!container || !d.products.length) return;
+      container.innerHTML = d.products.map(p => `
       <div class="product-card">
         <a href="urun-detay.html?id=${p.id}" class="prod-img-wrap">
           <img class="prod-img" src="${p.img}" alt="${p.name}"
@@ -380,6 +378,12 @@
           </a>
         </div>
       </div>`).join('');
+    }
+
+    const cached = getCachedSiteData();
+    if (cached) renderContent(cached);
+    const d = await getSiteData();
+    renderContent(d);
   })();
 </script>
 </body>

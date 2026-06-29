@@ -362,6 +362,8 @@
 <script src="site-data.js"></script>
 <script>
   (async function() {
+    const cached = getCachedSiteData();
+    if (cached) applyCommon(cached);
     const d = await getSiteData();
     applyCommon(d);
   })();

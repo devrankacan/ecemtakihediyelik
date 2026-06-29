@@ -439,14 +439,19 @@
 <script src="site-data.js"></script>
 <script>
   (async function() {
+    function render(d) {
+      applyCommon(d);
+      const t1 = document.getElementById('aboutText1');
+      if (t1) t1.textContent = d.about_text1;
+      const t2 = document.getElementById('aboutText2');
+      if (t2) t2.textContent = d.about_text2;
+      const img = document.getElementById('aboutImg');
+      if (img && d.about_img) img.src = d.about_img;
+    }
+    const cached = getCachedSiteData();
+    if (cached) render(cached);
     const d = await getSiteData();
-    applyCommon(d);
-    const t1 = document.getElementById('aboutText1');
-    if (t1) t1.textContent = d.about_text1;
-    const t2 = document.getElementById('aboutText2');
-    if (t2) t2.textContent = d.about_text2;
-    const img = document.getElementById('aboutImg');
-    if (img && d.about_img) img.src = d.about_img;
+    render(d);
   })();
 </script>
 </body>
