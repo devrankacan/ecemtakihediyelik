@@ -106,6 +106,11 @@
     .detail-desc-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 10px; }
     .detail-desc { font-size: 15px; color: var(--text-light); line-height: 1.85; margin-bottom: 32px; }
 
+    .detail-gallery { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+    .gallery-thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; opacity: .7; transition: all .2s; }
+    .gallery-thumb:hover { opacity: 1; }
+    .gallery-thumb.active { border-color: var(--murd); opacity: 1; }
+
     .detail-colors { margin-bottom: 24px; }
     .color-options { display: flex; flex-wrap: wrap; gap: 10px; }
     .color-chip { padding: 8px 18px; border: 1.5px solid #e8ddd5; background: #fff; border-radius: 24px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; transition: all .2s; }
@@ -392,9 +397,16 @@
       <section class="detail-section">
         <div class="detail-inner">
           <div class="detail-img-wrap">
-            <img class="detail-main-img" src="${product.img}" alt="${product.name}"
+            <img class="detail-main-img" id="detailMainImg" src="${product.img}" alt="${product.name}"
               onerror="this.outerHTML='<div class=\'detail-main-img placeholder\'><i class=\'fas fa-gem\'></i></div>'" />
           </div>
+          ${(product.gallery && product.gallery.length) ? `
+            <div class="detail-gallery">
+              ${[product.img, ...product.gallery].filter(Boolean).map((g, i) => `
+                <img src="${g}" class="gallery-thumb${i === 0 ? ' active' : ''}" onclick="selectMainImage(this,'${g}')" />
+              `).join('')}
+            </div>
+          ` : ''}
           <div class="detail-info">
             ${product.category ? `<div class="detail-badge">${product.category}</div>` : ''}
             <h1 class="detail-name">${product.name}</h1>
@@ -405,7 +417,7 @@
                 <div class="detail-desc-title">Renk Seçenekleri</div>
                 <div class="color-options">
                   ${product.colors.map((c, i) => `
-                    <button type="button" class="color-chip${i === 0 ? ' active' : ''}" data-color="${c}" onclick="selectColor(this)">${c}</button>
+                    <button type="button" class="color-chip${i === 0 ? ' active' : ''}" data-color="${c.name}" data-img="${c.img || ''}" onclick="selectColor(this)">${c.name}</button>
                   `).join('')}
                 </div>
               </div>
@@ -415,7 +427,7 @@
               <p class="detail-desc">${product.description}</p>
             ` : ''}
             <div class="detail-actions">
-              <a href="${waLink(d, product.name, product.colors && product.colors[0])}" id="detailWaBtn" class="btn-wa-big" target="_blank">
+              <a href="${waLink(d, product.name, product.colors && product.colors[0] && product.colors[0].name)}" id="detailWaBtn" class="btn-wa-big" target="_blank">
                 <i class="fab fa-whatsapp"></i> WhatsApp ile Sipariş Ver
               </a>
               <a href="urunler.html" class="btn-back">
@@ -447,6 +459,17 @@
       btn.classList.add('active');
       const waBtn = document.getElementById('detailWaBtn');
       if (waBtn) waBtn.href = waLink(d, product.name, btn.dataset.color);
+      if (btn.dataset.img) {
+        const mainImg = document.getElementById('detailMainImg');
+        if (mainImg) mainImg.src = btn.dataset.img;
+      }
+    };
+
+    window.selectMainImage = function(thumb, url) {
+      document.querySelectorAll('.gallery-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+      const mainImg = document.getElementById('detailMainImg');
+      if (mainImg) mainImg.src = url;
     };
   }
   })();

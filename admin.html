@@ -690,10 +690,6 @@
       <input type="text" id="prodPrice" placeholder="150,00₺" />
     </div>
     <div class="form-group" style="margin-bottom:14px;">
-      <label>Renk Seçenekleri</label>
-      <input type="text" id="prodColors" placeholder="Kırmızı, Mavi, Siyah (virgülle ayırın)" />
-    </div>
-    <div class="form-group" style="margin-bottom:14px;">
       <label>Görsel URL</label>
       <input type="url" id="prodImg" placeholder="https://..." oninput="previewImg('prodImg','prodImgPreview')" />
       <img id="prodImgPreview" class="img-preview" style="width:120px;height:100px;border-radius:8px;" />
@@ -704,9 +700,22 @@
         <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Dosyadan Görsel Yükle</span>
       </label>
     </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Ürün Galerisi</label>
+      <div id="galleryList" style="display:flex;flex-wrap:wrap;gap:10px;margin-bottom:10px;"></div>
+      <label style="text-transform:none;font-size:13px;font-weight:500;color:var(--text);cursor:pointer;">
+        <input type="file" accept="image/*" multiple style="display:none" onchange="addGalleryImages(this)" />
+        <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i> Galeriye Görsel Ekle</span>
+      </label>
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
+      <label>Renk Seçenekleri</label>
+      <div id="colorList" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px;"></div>
+      <button type="button" class="btn btn-outline btn-sm" onclick="addColorRow()"><i class="fas fa-plus"></i> Renk Ekle</button>
+    </div>
     <div class="form-group" style="margin-bottom:20px;">
       <label>Ürün Açıklaması</label>
-      <textarea id="prodDesc" rows="4" placeholder="Ürün hakkında detaylı bilgi girin... (malzeme, boyut, renk seçenekleri vb.)"></textarea>
+      <textarea id="prodDesc" rows="4" placeholder="Ürün hakkında detaylı bilgi girin... (malzeme, boyut vb.)"></textarea>
     </div>
     <div style="display:flex;gap:12px;justify-content:flex-end;">
       <button class="btn btn-secondary" onclick="closeProductModal()">İptal</button>
@@ -828,21 +837,26 @@
     });
   }
 
+  async function uploadFileAndGetUrl(file) {
+    const dataUrl = await compressImageFile(file, 1200, 0.8);
+    const res = await fetch('/api/upload', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ dataUrl })
+    });
+    const result = await res.json();
+    if (!res.ok || !result.ok) throw new Error('Yükleme başarısız');
+    return result.url;
+  }
+
   async function uploadFileToField(input, fieldId, previewId) {
     const file = input.files[0];
     if (!file) return;
     try {
-      const dataUrl = await compressImageFile(file, 1200, 0.8);
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ dataUrl })
-      });
-      const result = await res.json();
-      if (!res.ok || !result.ok) throw new Error('Yükleme başarısız');
-      document.getElementById(fieldId).value = result.url;
+      const url = await uploadFileAndGetUrl(file);
+      document.getElementById(fieldId).value = url;
       const prev = document.getElementById(previewId);
-      if (prev) { prev.src = result.url; prev.classList.add('show'); }
+      if (prev) { prev.src = url; prev.classList.add('show'); }
     } catch (e) {
       showToast('Görsel yüklenemedi, lütfen başka bir görsel deneyin.', true);
     }
@@ -850,6 +864,78 @@
 
   function uploadLogoFile(input) {
     uploadFileToField(input, 'logo_img_url', 'logoImgPreview');
+  }
+
+  // ── ÜRÜN GALERİSİ ──
+  let prodGalleryData = [];
+
+  function renderGalleryList() {
+    const el = document.getElementById('galleryList');
+    el.innerHTML = prodGalleryData.map((url, i) => `
+      <div style="position:relative;">
+        <img src="${url}" style="width:80px;height:80px;object-fit:cover;border-radius:8px;" />
+        <button type="button" onclick="removeGalleryImage(${i})" style="position:absolute;top:-6px;right:-6px;width:22px;height:22px;border-radius:50%;background:var(--murd);color:#fff;border:none;cursor:pointer;font-size:12px;">×</button>
+      </div>
+    `).join('');
+  }
+
+  async function addGalleryImages(input) {
+    const files = Array.from(input.files || []);
+    for (const file of files) {
+      try {
+        const url = await uploadFileAndGetUrl(file);
+        prodGalleryData.push(url);
+      } catch (e) {
+        showToast('Bir görsel yüklenemedi.', true);
+      }
+    }
+    input.value = '';
+    renderGalleryList();
+  }
+
+  function removeGalleryImage(i) {
+    prodGalleryData.splice(i, 1);
+    renderGalleryList();
+  }
+
+  // ── RENK SEÇENEKLERİ ──
+  let prodColorsData = [];
+
+  function renderColorList() {
+    const el = document.getElementById('colorList');
+    el.innerHTML = prodColorsData.map((c, i) => `
+      <div style="display:flex;align-items:center;gap:10px;">
+        <img src="${c.img || ''}" style="width:48px;height:48px;object-fit:cover;border-radius:8px;background:#f4ede6;${c.img ? '' : 'display:none;'}" />
+        <input type="text" value="${c.name || ''}" placeholder="Renk adı" oninput="prodColorsData[${i}].name=this.value" style="flex:1;" />
+        <label style="text-transform:none;font-size:12px;font-weight:500;color:var(--text);cursor:pointer;margin:0;">
+          <input type="file" accept="image/*" style="display:none" onchange="uploadColorImage(this,${i})" />
+          <span class="btn btn-outline btn-sm"><i class="fas fa-upload"></i></span>
+        </label>
+        <button type="button" onclick="removeColorRow(${i})" style="width:28px;height:28px;border-radius:50%;background:#eee;border:none;cursor:pointer;">×</button>
+      </div>
+    `).join('');
+  }
+
+  function addColorRow() {
+    prodColorsData.push({ name: '', img: '' });
+    renderColorList();
+  }
+
+  function removeColorRow(i) {
+    prodColorsData.splice(i, 1);
+    renderColorList();
+  }
+
+  async function uploadColorImage(input, i) {
+    const file = input.files[0];
+    if (!file) return;
+    try {
+      const url = await uploadFileAndGetUrl(file);
+      prodColorsData[i].img = url;
+      renderColorList();
+    } catch (e) {
+      showToast('Görsel yüklenemedi.', true);
+    }
   }
 
   // ── LOAD ALL ──
@@ -1007,10 +1093,13 @@
     document.getElementById('editProductId').value = '';
     document.getElementById('prodName').value = '';
     document.getElementById('prodPrice').value = '';
-    document.getElementById('prodColors').value = '';
     document.getElementById('prodImg').value = '';
     document.getElementById('prodDesc').value = '';
     document.getElementById('prodImgPreview').classList.remove('show');
+    prodGalleryData = [];
+    prodColorsData = [];
+    renderGalleryList();
+    renderColorList();
     await fillCategorySelect('');
     document.getElementById('productModal').classList.add('open');
   }
@@ -1027,9 +1116,12 @@
     document.getElementById('editProductId').value = id;
     document.getElementById('prodName').value = p.name;
     document.getElementById('prodPrice').value = p.price;
-    document.getElementById('prodColors').value = (p.colors || []).join(', ');
     document.getElementById('prodImg').value = p.img;
     document.getElementById('prodDesc').value = p.description || '';
+    prodGalleryData = (p.gallery || []).slice();
+    prodColorsData = (p.colors || []).map(c => typeof c === 'string' ? { name: c, img: '' } : { name: c.name || '', img: c.img || '' });
+    renderGalleryList();
+    renderColorList();
     await fillCategorySelect(p.category || '');
     const prev = document.getElementById('prodImgPreview');
     if (p.img) { prev.src = p.img; prev.classList.add('show'); }
@@ -1040,9 +1132,10 @@
     const name = document.getElementById('prodName').value.trim();
     const category = document.getElementById('prodCategory').value;
     const price = document.getElementById('prodPrice').value.trim();
-    const colors = document.getElementById('prodColors').value.trim().split(',').map(c => c.trim()).filter(Boolean);
     const img = document.getElementById('prodImg').value.trim();
     const description = document.getElementById('prodDesc').value.trim();
+    const colors = prodColorsData.filter(c => c.name.trim()).map(c => ({ name: c.name.trim(), img: c.img || '' }));
+    const gallery = prodGalleryData.slice();
     if (!name || !category || !price) { showToast('Ürün adı, kategori ve fiyat zorunlu!', true); return; }
 
     const d = await getSiteData();
@@ -1050,10 +1143,10 @@
 
     if (editId) {
       const idx = d.products.findIndex(x => x.id == editId);
-      if (idx !== -1) { d.products[idx].name = name; d.products[idx].category = category; d.products[idx].price = price; d.products[idx].colors = colors; d.products[idx].img = img; d.products[idx].description = description; }
+      if (idx !== -1) { d.products[idx].name = name; d.products[idx].category = category; d.products[idx].price = price; d.products[idx].colors = colors; d.products[idx].gallery = gallery; d.products[idx].img = img; d.products[idx].description = description; }
     } else {
       const maxId = d.products.length ? Math.max(...d.products.map(x => x.id)) : 0;
-      d.products.push({ id: maxId + 1, name, category, price, colors, img, description });
+      d.products.push({ id: maxId + 1, name, category, price, colors, gallery, img, description });
     }
 
     try {
