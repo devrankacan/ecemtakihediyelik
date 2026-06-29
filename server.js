@@ -17,7 +17,7 @@ if (!fs.existsSync(ADMIN_CREDS_FILE)) {
   fs.writeFileSync(ADMIN_CREDS_FILE, JSON.stringify({ username: 'ecemyonetim', password: 'Bb-EcmTk!2026#Vr' }));
 }
 
-app.use(express.json({ limit: '30mb' }));
+app.use(express.json({ limit: '40mb' }));
 app.use('/uploads', express.static(UPLOADS_DIR));
 app.use(express.static(__dirname));
 
