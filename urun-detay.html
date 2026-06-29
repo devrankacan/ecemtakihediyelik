@@ -106,6 +106,12 @@
     .detail-desc-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-light); margin-bottom: 10px; }
     .detail-desc { font-size: 15px; color: var(--text-light); line-height: 1.85; margin-bottom: 32px; }
 
+    .detail-colors { margin-bottom: 24px; }
+    .color-options { display: flex; flex-wrap: wrap; gap: 10px; }
+    .color-chip { padding: 8px 18px; border: 1.5px solid #e8ddd5; background: #fff; border-radius: 24px; font-size: 13px; font-weight: 600; color: var(--text); cursor: pointer; transition: all .2s; }
+    .color-chip:hover { border-color: var(--murd); }
+    .color-chip.active { background: var(--murd); border-color: var(--murd); color: #fff; }
+
     .detail-actions { display: flex; flex-direction: column; gap: 12px; }
     .btn-wa-big {
       display: flex;
@@ -394,12 +400,22 @@
             <h1 class="detail-name">${product.name}</h1>
             <div class="detail-price">${product.price}</div>
             <div class="detail-divider"></div>
+            ${product.colors && product.colors.length ? `
+              <div class="detail-colors">
+                <div class="detail-desc-title">Renk Seçenekleri</div>
+                <div class="color-options">
+                  ${product.colors.map((c, i) => `
+                    <button type="button" class="color-chip${i === 0 ? ' active' : ''}" data-color="${c}" onclick="selectColor(this)">${c}</button>
+                  `).join('')}
+                </div>
+              </div>
+            ` : ''}
             ${product.description ? `
               <div class="detail-desc-title">Ürün Açıklaması</div>
               <p class="detail-desc">${product.description}</p>
             ` : ''}
             <div class="detail-actions">
-              <a href="${waLink(d, product.name)}" class="btn-wa-big" target="_blank">
+              <a href="${waLink(d, product.name, product.colors && product.colors[0])}" id="detailWaBtn" class="btn-wa-big" target="_blank">
                 <i class="fab fa-whatsapp"></i> WhatsApp ile Sipariş Ver
               </a>
               <a href="urunler.html" class="btn-back">
@@ -425,6 +441,13 @@
     // Re-apply data-f attributes that were just rendered
     document.querySelectorAll('[data-f="address"]').forEach(el => el.textContent = d.address);
     document.querySelectorAll('[data-f="phone"]').forEach(el => el.textContent = d.phone);
+
+    window.selectColor = function(btn) {
+      document.querySelectorAll('.color-chip').forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      const waBtn = document.getElementById('detailWaBtn');
+      if (waBtn) waBtn.href = waLink(d, product.name, btn.dataset.color);
+    };
   }
   })();
 </script>

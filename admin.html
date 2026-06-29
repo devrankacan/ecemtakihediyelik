@@ -690,6 +690,10 @@
       <input type="text" id="prodPrice" placeholder="150,00₺" />
     </div>
     <div class="form-group" style="margin-bottom:14px;">
+      <label>Renk Seçenekleri</label>
+      <input type="text" id="prodColors" placeholder="Kırmızı, Mavi, Siyah (virgülle ayırın)" />
+    </div>
+    <div class="form-group" style="margin-bottom:14px;">
       <label>Görsel URL</label>
       <input type="url" id="prodImg" placeholder="https://..." oninput="previewImg('prodImg','prodImgPreview')" />
       <img id="prodImgPreview" class="img-preview" style="width:120px;height:100px;border-radius:8px;" />
@@ -1003,6 +1007,7 @@
     document.getElementById('editProductId').value = '';
     document.getElementById('prodName').value = '';
     document.getElementById('prodPrice').value = '';
+    document.getElementById('prodColors').value = '';
     document.getElementById('prodImg').value = '';
     document.getElementById('prodDesc').value = '';
     document.getElementById('prodImgPreview').classList.remove('show');
@@ -1022,6 +1027,7 @@
     document.getElementById('editProductId').value = id;
     document.getElementById('prodName').value = p.name;
     document.getElementById('prodPrice').value = p.price;
+    document.getElementById('prodColors').value = (p.colors || []).join(', ');
     document.getElementById('prodImg').value = p.img;
     document.getElementById('prodDesc').value = p.description || '';
     await fillCategorySelect(p.category || '');
@@ -1034,6 +1040,7 @@
     const name = document.getElementById('prodName').value.trim();
     const category = document.getElementById('prodCategory').value;
     const price = document.getElementById('prodPrice').value.trim();
+    const colors = document.getElementById('prodColors').value.trim().split(',').map(c => c.trim()).filter(Boolean);
     const img = document.getElementById('prodImg').value.trim();
     const description = document.getElementById('prodDesc').value.trim();
     if (!name || !category || !price) { showToast('Ürün adı, kategori ve fiyat zorunlu!', true); return; }
@@ -1043,10 +1050,10 @@
 
     if (editId) {
       const idx = d.products.findIndex(x => x.id == editId);
-      if (idx !== -1) { d.products[idx].name = name; d.products[idx].category = category; d.products[idx].price = price; d.products[idx].img = img; d.products[idx].description = description; }
+      if (idx !== -1) { d.products[idx].name = name; d.products[idx].category = category; d.products[idx].price = price; d.products[idx].colors = colors; d.products[idx].img = img; d.products[idx].description = description; }
     } else {
       const maxId = d.products.length ? Math.max(...d.products.map(x => x.id)) : 0;
-      d.products.push({ id: maxId + 1, name, category, price, img, description });
+      d.products.push({ id: maxId + 1, name, category, price, colors, img, description });
     }
 
     try {

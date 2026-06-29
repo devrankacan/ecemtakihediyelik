@@ -83,9 +83,9 @@ async function saveSiteData(data) {
 }
 
 // Helper: WhatsApp link
-function waLink(data, productName) {
+function waLink(data, productName, color) {
   const text = productName
-    ? encodeURIComponent(productName + ' için bilgi almak istiyorum')
+    ? encodeURIComponent(productName + (color ? ` (${color})` : '') + ' için bilgi almak istiyorum')
     : encodeURIComponent('Merhaba, sipariş vermek istiyorum');
   return `https://api.whatsapp.com/send/?phone=${data.whatsapp}&text=${text}&type=phone_number&app_absent=0`;
 }
