@@ -8,15 +8,29 @@ const PORT = process.env.PORT || 4001;
 const DATA_DIR = path.join(__dirname, 'data');
 const SITE_DATA_FILE = path.join(DATA_DIR, 'site-data.json');
 const ADMIN_CREDS_FILE = path.join(DATA_DIR, 'admin-creds.json');
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
+if (!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR);
 if (!fs.existsSync(SITE_DATA_FILE)) fs.writeFileSync(SITE_DATA_FILE, '{}');
 if (!fs.existsSync(ADMIN_CREDS_FILE)) {
   fs.writeFileSync(ADMIN_CREDS_FILE, JSON.stringify({ username: 'ecemyonetim', password: 'Bb-EcmTk!2026#Vr' }));
 }
 
-app.use(express.json({ limit: '15mb' }));
+app.use(express.json({ limit: '30mb' }));
+app.use('/uploads', express.static(UPLOADS_DIR));
 app.use(express.static(__dirname));
+
+app.post('/api/upload', (req, res) => {
+  const { dataUrl } = req.body;
+  const match = typeof dataUrl === 'string' && dataUrl.match(/^data:image\/(\w+);base64,(.+)$/);
+  if (!match) return res.status(400).json({ ok: false, error: 'Geçersiz görsel formatı' });
+  const ext = match[1] === 'jpeg' ? 'jpg' : match[1];
+  const buffer = Buffer.from(match[2], 'base64');
+  const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+  fs.writeFileSync(path.join(UPLOADS_DIR, filename), buffer);
+  res.json({ ok: true, url: `/uploads/${filename}` });
+});
 
 app.get('/api/site-data', (req, res) => {
   const data = JSON.parse(fs.readFileSync(SITE_DATA_FILE, 'utf8'));

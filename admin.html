@@ -824,16 +824,24 @@
     });
   }
 
-  function uploadFileToField(input, fieldId, previewId) {
+  async function uploadFileToField(input, fieldId, previewId) {
     const file = input.files[0];
     if (!file) return;
-    compressImageFile(file, 1200, 0.8).then(function(dataUrl) {
-      document.getElementById(fieldId).value = dataUrl;
+    try {
+      const dataUrl = await compressImageFile(file, 1200, 0.8);
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dataUrl })
+      });
+      const result = await res.json();
+      if (!res.ok || !result.ok) throw new Error('Yükleme başarısız');
+      document.getElementById(fieldId).value = result.url;
       const prev = document.getElementById(previewId);
-      if (prev) { prev.src = dataUrl; prev.classList.add('show'); }
-    }).catch(function() {
-      showToast('Görsel işlenemedi, lütfen başka bir görsel deneyin.', true);
-    });
+      if (prev) { prev.src = result.url; prev.classList.add('show'); }
+    } catch (e) {
+      showToast('Görsel yüklenemedi, lütfen başka bir görsel deneyin.', true);
+    }
   }
 
   function uploadLogoFile(input) {
